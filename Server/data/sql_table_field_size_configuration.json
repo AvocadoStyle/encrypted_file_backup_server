@@ -1,0 +1,15 @@
+{
+  "Clients": {
+      "id_size": 16,
+      "name_size": 255,
+      "publickey_size": 160,
+      "lastseen_size": null,
+      "AES_key_size": 16
+    },
+  "Files": {
+      "id_size": 16,
+      "filename_size": 255,
+      "pathname_size": 255,
+      "verified": null
+    }
+}

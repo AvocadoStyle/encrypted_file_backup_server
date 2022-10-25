@@ -1,8 +1,12 @@
 import sqlite3
+import data
 
-def create_table():
-    con = sqlite3.connect("sq.db")
+
 
 if __name__ == '__main__':
-    print("hey")
-    create_table()
+    print("test1")
+    clients_db = data.Clients()
+
+
+    print("test2")
+
