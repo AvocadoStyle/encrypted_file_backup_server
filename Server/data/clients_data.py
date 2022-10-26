@@ -1,4 +1,4 @@
-from data_consumer import DataConsumer
+from data.data_consumer import DataConsumer
 
 
 class Clients(DataConsumer):
@@ -10,23 +10,33 @@ class Clients(DataConsumer):
             raise Exception(f"there is no data about the size of this table: {self.CLASS_NAME}")
 
     def create_table(self):
-        pass
-
-    def add_client(self):
         self.connect()
-        pass
+        self.connector.executescript(f"""
+        CREATE TABLE IF NOT EXISTS {self.CLASS_NAME} (
+            ID CHAR(16) NOT NULL PRIMARY KEY,
+            Name CHAR(255) NOT NULL,
+            PublicKey CHAR(160) NOT NULL,
+            LastSeen DATE,
+            AESkey
+            );
+        """)
+        self.close_connection()
 
-    def add_public_key(self):
-        pass
+    def insert_table(self, client_logic):
+        self.connect()
+        self.connector.executescript(f"""
+        INSERT INTO {self.CLASS_NAME} VALUES({ID}, "{Name}", "{PublicKey}", "{LastSeen}", "{AESkey}");
+        """)
+        self.close_connection()
 
-    def generate_uuid(self):
-        pass
-
-    def generate_public_key(self):
-        pass
-
-    def generate_AES_key(self):
-        pass
-
-    def update_last_seen(self):
-        pass
+    def client_by_id(self, ID):
+        self.connect()
+        cur = self.connector.cursor()
+        cur.execute(f"""
+            SELECT * FROM {self.CLASS_NAME}
+            WHERE ID = {ID}
+            """)
+        all = cur.fetchall()
+        self.connector.commit()
+        self.close_connection()
+        return all
