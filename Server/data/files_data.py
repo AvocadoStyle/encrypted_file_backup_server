@@ -1,5 +1,4 @@
-from data_consumer import DataConsumer
-
+from data import DataConsumer
 
 class Files(DataConsumer):
     def __init__(self):
@@ -12,7 +11,7 @@ class Files(DataConsumer):
     def create_table(self):
         self.connect()
         self.connector.executescript(f"""
-                CREATE TABLE {self.CLASS_NAME} (
+                CREATE TABLE IF NOT EXISTS {self.CLASS_NAME} (
                     FOREIGN KEY(ID) REFERENCES Clients(ID),
                     FileName CHAR(255) NOT NULL,
                     PathName CHAR(255) NOT NULL,
@@ -22,11 +21,13 @@ class Files(DataConsumer):
         self.close_connection()
 
     def insert_table(self, file_logic):
-        self.connect()
-        self.connector.executescript(f"""
-        INSERT INTO {self.CLASS_NAME} VALUES({ID}, {FileName}, {PathName}, {Verified});
-        """)
-        self.close_connection()
+        insert_query_command = f"""
+        INSERT INTO {self.CLASS_NAME} VALUES({file_logic.ID}, {file_logic.FileName}, {file_logic.PathName},
+            {file_logic.Verified});
+        """
+        self.insert_query(insert_query_command)
+
+
 
 
 
