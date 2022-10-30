@@ -9,7 +9,12 @@ class ClientLogic:
         self.PublicKey = PublicKey
         self.LastSeen = LastSeen
         self.AESkey = AESkey
+        self.check_protocol_valid()
 
     def check_protocol_valid(self):
+        """
+        check protocl validation of the input
+        :return:
+        """
         print(data.utilities_data.load_data_size())
 
