@@ -1,0 +1,7 @@
+{
+    "MAX_CLIENTS_CONNECTED": 3,
+    "MESSAGE_PROPERTIES": {
+        "MESSAGE_LENGTH": 1024
+    }
+
+}
