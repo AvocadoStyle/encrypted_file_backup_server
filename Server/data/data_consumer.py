@@ -1,6 +1,5 @@
 import json
 import sqlite3
-import pkgutil
 import os
 
 class DataConsumer:
@@ -15,7 +14,7 @@ class DataConsumer:
         self.CLASS_NAME = self.__class__.__name__
         # use as connector to the sqlite3
         self.connector = None
-        # table data sizes dict loading
+        # table data sizes dict.py loading
         self.data_size = None
         self.load_data_size()
 
@@ -33,10 +32,28 @@ class DataConsumer:
         with open(js_file, "r") as sql_size_data:
             self.data_size = json.load(sql_size_data)
 
+    def execute_query(self, command):
+        try:
+            self.connect()
+            cur = self.connector.cursor()
+            cur.execute(command)
+            all = cur.fetchall()
+            self.connector.commit()
+            self.close_connection()
+            return all
+        except:
+            pass
+
+    def insert_query(self, command):
+        try:
+            self.connect()
+            self.connector.executescript(command)
+            self.close_connection()
+        except:
+            print("kaki")
+            pass
+
+    # abstract
     def create_table(self):
         pass
-
-    def exec_create(self, command):
-        pass
-
 

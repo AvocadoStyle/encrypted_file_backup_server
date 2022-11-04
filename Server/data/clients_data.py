@@ -1,6 +1,5 @@
 from data.data_consumer import DataConsumer
 
-
 class Clients(DataConsumer):
     def __init__(self):
         super().__init__()
@@ -12,31 +11,26 @@ class Clients(DataConsumer):
     def create_table(self):
         self.connect()
         self.connector.executescript(f"""
-        CREATE TABLE IF NOT EXISTS {self.CLASS_NAME} (
-            ID CHAR(16) NOT NULL PRIMARY KEY,
-            Name CHAR(255) NOT NULL,
-            PublicKey CHAR(160) NOT NULL,
-            LastSeen DATE,
-            AESkey
-            );
-        """)
+                CREATE TABLE IF NOT EXISTS {self.CLASS_NAME} (
+                    ID CHAR(16) NOT NULL PRIMARY KEY,
+                    Name CHAR(255) NOT NULL,
+                    PublicKey CHAR(160) NOT NULL,
+                    LastSeen DATE,
+                    AESkey
+                    );
+                """)
         self.close_connection()
 
     def insert_table(self, client_logic):
-        self.connect()
-        self.connector.executescript(f"""
-        INSERT INTO {self.CLASS_NAME} VALUES({ID}, "{Name}", "{PublicKey}", "{LastSeen}", "{AESkey}");
-        """)
-        self.close_connection()
+        insert_command_query = f"""
+            INSERT INTO {self.CLASS_NAME} VALUES({client_logic.ID}, "{client_logic.Name}",
+             "{client_logic.PublicKey}", "{client_logic.LastSeen}", "{client_logic.AESkey}");
+            """
+        self.insert_query(insert_command_query)
 
-    def client_by_id(self, ID):
-        self.connect()
-        cur = self.connector.cursor()
-        cur.execute(f"""
+    def get_client_by_id(self, ID):
+        command_query = f"""
             SELECT * FROM {self.CLASS_NAME}
             WHERE ID = {ID}
-            """)
-        all = cur.fetchall()
-        self.connector.commit()
-        self.close_connection()
-        return all
+            """
+        return self.execute_query(command_query)
