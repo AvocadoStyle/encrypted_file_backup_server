@@ -1,6 +1,13 @@
 {
     "MAX_CLIENTS_CONNECTED": 3,
     "MESSAGE_PROPERTIES": {
+        "HEADER_SIZE": {
+            "CLIENT_ID": [0, 16],
+            "VERSION": 16,
+            "CODE": [17, 19],
+            "PAYLOAD_SIZE": [19, 23],
+            "TOTAL_SIZE": 23
+        },
         "MESSAGE_LENGTH": 1024
     }
 
