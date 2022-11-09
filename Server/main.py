@@ -1,17 +1,15 @@
 import sqlite3
 import data
 import data.logic as logic
+import Controller
+import threading
 
-
+# contains port number
+PORT_FILE = 'port.info'
+HOST = '127.0.0.1'
 if __name__ == '__main__':
-    print("test1")
-    client_lg = logic.ClientLogic(1, "Eden", "1234567", "26/10/2022", "ABCDEF")
-    file_lg = logic.file_logic.FileLogic()
-    clients_db = data.Clients()
-    clients_db.create_table()
-    clients_db.insert_table(client_lg)
-    print(clients_db.get_client_by_id(1)[0][1]) # will return Name ==>> Eden
-
-    print("test2")
-
-
+    # getting the port
+    port = Controller.get_port_from_file(PORT_FILE)
+    # getting the server object once
+    server = Controller.Server(HOST, port)
+    server.start()

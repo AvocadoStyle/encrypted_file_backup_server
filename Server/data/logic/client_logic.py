@@ -3,7 +3,7 @@ import data.utilities_data
 
 
 class ClientLogic:
-    def __init__(self, ID, Name, PublicKey, LastSeen, AESkey):
+    def __init__(self, ID=None, Name=None, PublicKey=None, LastSeen=None, AESkey=None):
         self.ID = ID
         self.Name = Name
         self.PublicKey = PublicKey

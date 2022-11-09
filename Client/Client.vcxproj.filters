@@ -21,5 +21,17 @@
     <ClCompile Include="Source1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="client_send_message_example.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
