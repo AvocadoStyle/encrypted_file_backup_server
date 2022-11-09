@@ -44,9 +44,10 @@ class Server:
 
     def __init_message_handler(self, data):
         """
-        dynamic message handler
+        dynamic message requests handler and responses
         :return: MessageHandle object
         """
+        # get the message handler module
         message_handler_module = importlib.import_module(f"Controller.message_handle")
         message_handler_obj = getattr(message_handler_module, f"MessageHandle")
         message_handler = message_handler_obj(data, self.server_config, self.database)
