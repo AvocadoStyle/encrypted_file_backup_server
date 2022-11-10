@@ -28,7 +28,6 @@ class DataConsumer:
 
     def load_data_size(self):
         js_file = os.path.join(__package__, self.SQL_TABLES_SIZES_FILE)
-        print(js_file)
         with open(js_file, "r") as sql_size_data:
             self.data_size = json.load(sql_size_data)
 
@@ -36,7 +35,7 @@ class DataConsumer:
         try:
             self.connect()
             cur = self.connector.cursor()
-            cur.execute(command)
+            cur.execute(command[0], command[1])
             all = cur.fetchall()
             self.connector.commit()
             self.close_connection()

@@ -45,8 +45,13 @@ class RequestHandler:
         """
         client_id = uuid.uuid4()
         client_id_bytes = client_id.bytes
-        self.clients_db.insert_table(client_id_bytes, self.payload_content)
-        client = self.clients_db.get_client_by_id(client_id_bytes)
+        # self.clients_db.insert_table(client_id_bytes, self.payload_content)
+        # client = self.clients_db.get_client_by_id(client_id_bytes)
+
+        self.clients_db.insert_table(client_id_bytes, "EDEN")
+        result = self.clients_db.get_client_by_id(client_id_bytes)
+        print(f'id is: {result[0][0]} name is: {result[0][1]}')
+
 
     def __send_public_key_handle_code(self):
         pass
