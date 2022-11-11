@@ -13,14 +13,18 @@ class RequestHandler:
 
         self.payload_content = self.message_parser.payload_content
         self.server_config = self.message_parser.server_config
+
         self.request_code = self.server_config['MESSAGE_PROPERTIES']['REQUEST_CODE']
         self.response_code = self.server_config['MESSAGE_PROPERTIES']['RESPONSE_CODE']
 
+    def initialization(self):
+        self.payload_content = self.message_parser.payload_content
 
     def request_code_handle(self):
         """
         decide the request operation to execute
         """
+        self.initialization()
         CODE = int.from_bytes(self.message_parser.code, byteorder='big')
 
         if CODE == self.request_code['REGISTRATION_REQUEST']['CODE']:
@@ -43,12 +47,17 @@ class RequestHandler:
             - the Name from the content 255bytes including null terminator
         :return:
         """
+        # generate uuid
         client_id = uuid.uuid4()
         client_id_bytes = client_id.bytes
+
+        # insert the UUID with the NAME to the DB
+        content = self.payload_content # name
+
         # self.clients_db.insert_table(client_id_bytes, self.payload_content)
         # client = self.clients_db.get_client_by_id(client_id_bytes)
 
-        self.clients_db.insert_table(client_id_bytes, "EDEN")
+        self.clients_db.insert_table(client_id_bytes, content)
         result = self.clients_db.get_client_by_id(client_id_bytes)
         print(f'id is: {result[0][0]} name is: {result[0][1]}')
 
