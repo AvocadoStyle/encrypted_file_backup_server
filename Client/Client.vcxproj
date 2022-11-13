@@ -127,10 +127,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClientController.cpp" />
+    <ClCompile Include="FileHandler.cpp" />
+    <ClCompile Include="FileUtilities.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RequestsHandler.cpp" />
+    <ClCompile Include="ResponseHandler.cpp" />
+    <ClCompile Include="SocketHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="transfer.info" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ClientController.h" />
+    <ClInclude Include="FileHandler.h" />
+    <ClInclude Include="FileUtilities.h" />
+    <ClInclude Include="RequestsHandler.h" />
+    <ClInclude Include="ResponseHandler.h" />
+    <ClInclude Include="SocketHandler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
