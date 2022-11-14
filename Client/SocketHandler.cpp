@@ -1,6 +1,6 @@
 #include "SocketHandler.h"
 
-SocketHandler::SocketHandler() {
+SocketHandler::SocketHandler() { 
 	this->s = nullptr;
 	this->file_handler = new FileHandler();
 	this->file_utilities = new FileUtilities();
