@@ -15,7 +15,12 @@ class SocketHandler {
 public:
 	std::string address;
 	std::string port;
+
 	tcp::socket* s;
+	tcp::resolver* resolver;
+	boost::asio::io_context* io_context;
+
+
 	FileHandler *file_handler;
 	FileUtilities* file_utilities;
 	SocketHandler();

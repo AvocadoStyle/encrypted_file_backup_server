@@ -7,7 +7,7 @@ SocketHandler::SocketHandler() {
 }
 
 SocketHandler::~SocketHandler() {
-
+	this->__reset_all();
 }
 
 /**
@@ -23,10 +23,12 @@ bool SocketHandler::connect(std::string address, std::string port) {
 	}
 	this->address = address;
 	this->port = port;
-	boost::asio::io_context io_context;
-	this->s = new tcp::socket(io_context);
-	tcp::resolver resolver(io_context);
-	boost::asio::connect((*this->s), resolver.resolve(this->address.c_str(), this->port.c_str()));
+
+	this->io_context = new boost::asio::io_context;
+	this->resolver = new tcp::resolver(*this->io_context);
+	this->s = new tcp::socket(*this->io_context);
+
+	boost::asio::connect(*this->s, this->resolver->resolve(this->address.c_str(), this->port.c_str()));
 	return true;
 }
 
@@ -36,7 +38,6 @@ bool SocketHandler::connect(std::string address, std::string port) {
  */
 bool SocketHandler::disconnect(){
 	if (this->__is_socket_connected()) {
-		s->close();
 		this->__reset_all();
 		return true;
 	}
@@ -49,7 +50,7 @@ bool SocketHandler::send_msg(uint8_t* buffer, size_t size) {
 	if (!this->__is_socket_connected()) {
 		throw std::exception("socket is not connected - you can't write to socket");
 	}
-	boost::asio::write(*s, boost::asio::buffer(buffer, 1024));
+	boost::asio::write(*this->s, boost::asio::buffer(buffer, 1024));
 	return true;
 }
 
@@ -69,6 +70,11 @@ bool SocketHandler::__is_socket_connected() {
 }
 
 void SocketHandler::__reset_all() {
-	delete s;
-	s = nullptr;
+	this->s->close();
+	delete this->s;
+	delete this->io_context;
+	delete this->resolver;
+	this->s = nullptr;
+	this->io_context = nullptr;
+	this->resolver = nullptr;
 }
