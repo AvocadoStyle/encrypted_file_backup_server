@@ -16,6 +16,8 @@ public:
 
 	std::string read_address_from_file();
 	std::string read_port_from_file();
+	std::string read_name_from_file();
+	std::string read_file_path_from_file();
 
 private:
 	uint8_t* __read_client_instruction_file();

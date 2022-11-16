@@ -32,6 +32,35 @@ std::string FileHandler::read_port_from_file() {
 	return token_port;
 }
 
+std::string FileHandler::read_name_from_file() {
+	uint8_t* content = this->__read_client_instruction_file();
+	char* con = reinterpret_cast<char*>(content);
+	std::string cntnt = con;
+	std::string del = "\n";
+	// take first token pos
+	size_t name_start = cntnt.find(del) + 1;
+	std::string name_s = cntnt.substr(name_start, 100);
+	// take next token pos
+	int name_end = name_s.find(del); // make sure it's 100 chars atleast
+	std::string token_name = cntnt.substr(name_start, name_end);
+	return token_name;
+}
+
+std::string FileHandler::read_file_path_from_file() {
+	uint8_t* content = this->__read_client_instruction_file();
+	char* con = reinterpret_cast<char*>(content);
+	std::string cntnt = con;
+	std::string del = "\n";
+	size_t file_start = cntnt.find(del) + 1;
+	std::string new_st = cntnt.substr(file_start);
+	size_t file_s = new_st.find(del) + 1;
+	std::string file_name = new_st.substr(file_s);
+	size_t fe = file_name.find(del);
+	file_name = file_name.substr(0, fe);
+
+	return file_name;
+}
+
 uint8_t* FileHandler::__read_client_instruction_file() {
 	std::string client_instruction = CLIENT_INSTRUCTION;
 	size_t len = client_instruction.length();

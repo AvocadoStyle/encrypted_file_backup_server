@@ -11,6 +11,8 @@ class ClientController {
 public:
 	std::string port;
 	std::string address;
+	std::string name;
+	std::string file_name;
 	SocketHandler *s;
 	RequestHandler *req_handler;
 	FileHandler* file_handler;

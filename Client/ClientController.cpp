@@ -15,11 +15,15 @@ ClientController::~ClientController() {
 	delete s;
 	delete req_handler;
 	delete file_handler;
+	this->address =		nullptr;
+	this->port	  =		nullptr;
 }
 
 void ClientController::initialize() {
-	this->address = file_handler->read_address_from_file();
-	this->port = file_handler->read_port_from_file();
+	this->address      = this->file_handler->read_address_from_file();
+	this->port	       = this->file_handler->read_port_from_file();
+	this->name		   = this->file_handler->read_name_from_file();
+	this->file_name    = this->file_handler->read_file_path_from_file();
 }
 
 
