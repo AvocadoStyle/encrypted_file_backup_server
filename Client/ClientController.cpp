@@ -5,7 +5,7 @@ ClientController::ClientController() {
 	this->port = {0};
 	this->address = {0};
 	this->s = new SocketHandler();
-	this->req_handler = new RequestHandler();
+	this->req_handler = new RequestsHandler();
 	this->file_handler = new FileHandler();
 	this->file_utilities = new FileUtilities();
 	initialize();
@@ -15,8 +15,8 @@ ClientController::~ClientController() {
 	delete s;
 	delete req_handler;
 	delete file_handler;
-	this->address =		nullptr;
-	this->port	  =		nullptr;
+	this->address = nullptr;
+	this->port	  =	nullptr;
 }
 
 void ClientController::initialize() {
@@ -27,11 +27,15 @@ void ClientController::initialize() {
 }
 
 
-bool ClientController::registration(char *name){
+bool ClientController::registration(){
 	s->connect(this->address, this->port);
-	uint8_t request[1024] = "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x01\x04\x4C\x00\x00\x00\x05\EDEN\x00";
-	//uint8_t request[1024] = "hey";
-	s->send_msg(request, 1024);
+	// build the protocol payload
+	this->req_handler->registration_request_handle(this->name);
+
+
+
+
+	//s->send_msg(request, 1024);
 	return true;
 }
 

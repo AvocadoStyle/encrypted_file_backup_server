@@ -10,8 +10,7 @@
 using boost::asio::ip::tcp;
 int main() {
 	ClientController* client_controller = new ClientController();
-	char name[] = "Eden\0";
-	client_controller->registration(name);
+	client_controller->registration();
 
 
 

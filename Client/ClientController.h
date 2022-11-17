@@ -14,7 +14,7 @@ public:
 	std::string name;
 	std::string file_name;
 	SocketHandler *s;
-	RequestHandler *req_handler;
+	RequestsHandler *req_handler;
 	FileHandler* file_handler;
 	FileUtilities* file_utilities;
 
@@ -22,7 +22,7 @@ public:
 	~ClientController();
 
 	void initialize();
-	bool registration(char* name);
+	bool registration();
 
 
 };
