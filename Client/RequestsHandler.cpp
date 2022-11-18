@@ -42,32 +42,28 @@ void RequestsHandler::registration_request_handle(std::string name) {
 	// merge together the message
 	this->total_size = __CLIENT_ID_SIZE__ + __VERSION_SIZE__ + __CODE_SIZE__ + __PAYLOAD_SIZE_SIZE__ + __NAME_SIZE__;
 	this->build_message = (uint8_t*)malloc(this->total_size);
-	int start = 0;
-	for (int i = start; i < __CLIENT_ID_SIZE__; i++) {
-		build_message[i] = this->client_id[i];
-	}
-	start = start + __CLIENT_ID_SIZE__;
-	for (int i = start, j=0; i < __VERSION_SIZE__+start; i++, j++) {
-		build_message[i] = this->version[j];
-	}
-	start = start + __VERSION_SIZE__;
-	for (int i = start, j = 0; i < __CODE_SIZE__ + start; i++, j++) {
-		build_message[i] = this->code[j];
-	}
-	start = start + __CODE_SIZE__;
-	for (int i = start, j = 0; i < __PAYLOAD_SIZE_SIZE__ + start; i++, j++) {
-		build_message[i] = this->payload_size[j];
-	}
-	start = start + __PAYLOAD_SIZE_SIZE__;
-	for (int i = start, j = 0; i < __NAME_SIZE__ + start; i++, j++) {
-		build_message[i] = this->payload[j];
-	}
-
-
-
-
-
+	int *start;
+	start = (int*)malloc(sizeof(int));
+	*start = 0;
+	this->__set_build_message(start, this->client_id, __CLIENT_ID_SIZE__);
+	this->__set_build_message(start, this->version, __VERSION_SIZE__);
+	this->__set_build_message(start, this->code, __CODE_SIZE__);
+	this->__set_build_message(start, this->payload_size, __PAYLOAD_SIZE_SIZE__);
+	this->__set_build_message(start, this->payload, __NAME_SIZE__);
 }
+
+/*
+ * set the final build_meesage to be send to the server
+ */
+void RequestsHandler::__set_build_message(int* start, uint8_t* section, int size_to_add) {
+	int start_val = *start;
+	for (int i = start_val, j=0; i < size_to_add + start_val; i++, j++) {
+		build_message[i] = section[j];
+	}
+	*start = *start + size_to_add;
+}
+
+
 /*
  * set the client_id to be a default value to send to the server, the server will generate the client id.
  */
@@ -76,9 +72,12 @@ void RequestsHandler::__set_client_id_default() {
 		this->client_id[i] = '\x00';
 	}
 }
-
+/*
+ * set the version to be a default value to send to the server, the server will generate the client id.
+ */
 void RequestsHandler::__set_version_id_default() {
 	for (int i = 0; i < __VERSION_SIZE__; i++) {
 		this->version[i] = '\x00';
 	}
 }
+

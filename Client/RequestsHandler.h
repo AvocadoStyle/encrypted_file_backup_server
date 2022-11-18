@@ -39,6 +39,7 @@ public:
 	void registration_request_handle(std::string name);
 
 private:
+	void __set_build_message(int* start, uint8_t* section, int size_to_add);
 	void __set_client_id_default();
 	void __set_version_id_default();
 
