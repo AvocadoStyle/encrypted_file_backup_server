@@ -40,8 +40,8 @@ void RequestsHandler::registration_request_handle(std::string name) {
 	}
 
 	// merge together the message
-	int total_size = __CLIENT_ID_SIZE__ + __VERSION_SIZE__ + __CODE_SIZE__ + __PAYLOAD_SIZE_SIZE__ + __NAME_SIZE__;
-	this->build_message = (uint8_t*)malloc(total_size);
+	this->total_size = __CLIENT_ID_SIZE__ + __VERSION_SIZE__ + __CODE_SIZE__ + __PAYLOAD_SIZE_SIZE__ + __NAME_SIZE__;
+	this->build_message = (uint8_t*)malloc(this->total_size);
 	int start = 0;
 	for (int i = start; i < __CLIENT_ID_SIZE__; i++) {
 		build_message[i] = this->client_id[i];
@@ -62,6 +62,7 @@ void RequestsHandler::registration_request_handle(std::string name) {
 	for (int i = start, j = 0; i < __NAME_SIZE__ + start; i++, j++) {
 		build_message[i] = this->payload[j];
 	}
+
 
 
 

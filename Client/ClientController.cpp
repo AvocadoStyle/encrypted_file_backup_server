@@ -31,6 +31,8 @@ bool ClientController::registration(){
 	s->connect(this->address, this->port);
 	// build the protocol payload
 	this->req_handler->registration_request_handle(this->name);
+	s->send_msg(this->req_handler->build_message, this->req_handler->total_size);
+
 
 
 

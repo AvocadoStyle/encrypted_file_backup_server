@@ -25,7 +25,7 @@ class RequestHandler:
         decide the request operation to execute
         """
         self.initialization()
-        CODE = int.from_bytes(self.message_parser.code, byteorder='big')
+        CODE = int.from_bytes(self.message_parser.code, byteorder='little')
 
         if CODE == self.request_code['REGISTRATION_REQUEST']['CODE']:
             self.__registration_handle_code()

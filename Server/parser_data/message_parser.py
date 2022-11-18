@@ -56,7 +56,7 @@ class MessageParser:
 
     def __parse_payload_content(self):
         payload_start = self.server_config['MESSAGE_PROPERTIES']['HEADER_SIZE']['TOTAL_SIZE']
-        self.payload_size = int.from_bytes(self.payload_size, byteorder='big')
+        self.payload_size = int.from_bytes(self.payload_size, byteorder='little')
         payload_end = payload_start + self.payload_size
         self.payload_content = self.data[payload_start:payload_end]
 

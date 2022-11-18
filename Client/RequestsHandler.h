@@ -24,12 +24,13 @@
 
 class RequestsHandler {
 public:
-	uint8_t client_id[__CLIENT_ID_SIZE__];
-	uint8_t version[__VERSION_SIZE__];
-	uint8_t code[__CODE_SIZE__];
-	uint8_t payload_size[__PAYLOAD_SIZE_SIZE__];
-	uint8_t* payload;
-	uint8_t* build_message;
+	uint8_t		client_id[__CLIENT_ID_SIZE__];
+	uint8_t		version[__VERSION_SIZE__];
+	uint8_t		code[__CODE_SIZE__];
+	uint8_t		payload_size[__PAYLOAD_SIZE_SIZE__];
+	uint8_t*	payload;
+	uint8_t*	build_message;
+	int			total_size;
 
 
 	RequestsHandler();
