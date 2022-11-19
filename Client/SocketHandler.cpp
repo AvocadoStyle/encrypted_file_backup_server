@@ -1,5 +1,5 @@
 #include "SocketHandler.h"
-
+#include <iostream>
 SocketHandler::SocketHandler() { 
 	this->s = nullptr;
 	this->file_handler = new FileHandler();
@@ -57,6 +57,9 @@ bool SocketHandler::send_msg(uint8_t* buffer, size_t size) {
 }
 
 bool SocketHandler::recv_msg(uint8_t* buffer, size_t size) {
+	char buffu[1024] = { 0 };
+	boost::asio::read(*this->s, boost::asio::buffer(buffu, 1024));
+	std::cout << buffu << std::endl;
 	return true;
 }
 

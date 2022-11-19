@@ -26,9 +26,8 @@ class RequestHandler:
         """
         self.initialization()
         CODE = int.from_bytes(self.message_parser.code, byteorder='little')
-
         if CODE == self.request_code['REGISTRATION_REQUEST']['CODE']:
-            self.__registration_handle_code()
+             self.__registration_handle_code()
         elif CODE == self.request_code['SEND_PUBLIC_KEY_REQUEST']['CODE']:
             self.__send_public_key_handle_code()
         elif CODE == self.request_code['SEND_FILE_REQUEST']['CODE']:
@@ -60,7 +59,8 @@ class RequestHandler:
         self.clients_db.insert_table(client_id_bytes, content)
         result = self.clients_db.get_client_by_id(client_id_bytes)
         print(f'id is: {result[0][0]} name is: {result[0][1]}')
-
+        print("now returning the uuid to the client: ")
+        self.message_parser.client_id = client_id_bytes
 
     def __send_public_key_handle_code(self):
         pass

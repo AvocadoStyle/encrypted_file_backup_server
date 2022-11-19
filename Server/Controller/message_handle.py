@@ -1,5 +1,5 @@
 import uuid
-from parser_data import MessageParser, RequestHandler
+from parser_data import MessageParser, RequestHandler, ResponseHandler
 
 class MessageHandle:
     def __init__(self, data, server_config, database):
@@ -16,6 +16,8 @@ class MessageHandle:
         self.files_db = database['files_db']
         self.message_parser = MessageParser(self.data, self.server_config)
         self.request_handler = RequestHandler(self.message_parser, self.clients_db, self.files_db)
+        # ryh
+        self.response_handler = ResponseHandler(self.message_parser)
 
     def message_handle_main(self):
         """
@@ -29,8 +31,9 @@ class MessageHandle:
         self.__payload_handle()
 
         # handle the requests
-        self.__request_handle()
         response_to_client_pack_header_and_payload = None  # @TODO get the response msg and send it to client
+        self.__request_handle()
+        self.__response_handle()  # header is the same
 
     def __header_handle(self):
         """
@@ -50,6 +53,12 @@ class MessageHandle:
         :return:
         """
         self.request_handler.request_code_handle()
+
+    def __response_handle(self):
+        """
+        handle the response
+        """
+        self.response_handler.response_code_handle()
 
 
 

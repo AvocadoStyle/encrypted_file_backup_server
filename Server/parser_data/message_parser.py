@@ -11,6 +11,21 @@ class MessageParser:
         self.payload_size = None
         self.payload_content = None
 
+        self.payload_size_response = None
+        self.code_response = None
+        self.name = None
+        self.public_key = None
+
+        self.file_name = None
+        self.content_size = None
+        self.message_content = None
+        self.s_key_encrypted = None
+        self.cksum = None
+
+
+        # finally
+        self.response_data = None
+
     def __str__(self):
         return f"client id: {self.client_id} version: {self.version} code: {self.code}" \
                f"payload_size: {self.payload_size}"

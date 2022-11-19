@@ -5,6 +5,9 @@ class ResponseHandler {
 public:
 	ResponseHandler();
 	~ResponseHandler();
+
+
+	void registration_response_handle();
 };
 
 

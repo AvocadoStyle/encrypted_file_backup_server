@@ -32,6 +32,10 @@ bool ClientController::registration(){
 	// build the protocol payload
 	this->req_handler->registration_request_handle(this->name);
 	s->send_msg(this->req_handler->build_message, this->req_handler->total_size);
+	uint8_t* bff;
+	bff = (uint8_t*)malloc(sizeof(uint8_t) * 20);
+	size_t sizee = 1024;
+	s->recv_msg(bff, sizee);
 
 
 
