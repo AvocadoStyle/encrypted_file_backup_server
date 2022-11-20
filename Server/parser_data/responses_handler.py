@@ -29,7 +29,10 @@ class ResponseHandler:
         self.message_parser.payload_size_response = self.response_code["REGISTRATION_SUCCESS_RESPONSE"]["FIELD"] \
             ["CLIENT_ID"]
         code_bytes = (int.to_bytes(self.message_parser.code_response, byteorder='big', length=2))
-        payload_size_bytes = (int.to_bytes(self.message_parser.payload_size_response, byteorder='big', length=4))
+        payload_size_bytes = (int.to_bytes(self.message_parser.payload_size_response, byteorder='little', length=4))
+        self.message_parser.response_data_header = struct.pack('1s2s4s', self.message_parser.version,
+                                                               code_bytes,
+                                                               payload_size_bytes)
         self.message_parser.response_data = struct.pack('1s2s4s16s', self.message_parser.version,
                                                          code_bytes,
                                                          payload_size_bytes,

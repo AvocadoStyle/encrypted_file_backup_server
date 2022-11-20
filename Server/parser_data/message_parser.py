@@ -25,6 +25,8 @@ class MessageParser:
 
         # finally
         self.response_data = None
+        self.response_data_header = None
+        self.response_data_payload = None
 
     def __str__(self):
         return f"client id: {self.client_id} version: {self.version} code: {self.code}" \
@@ -71,7 +73,8 @@ class MessageParser:
 
     def __parse_payload_content(self):
         payload_start = self.server_config['MESSAGE_PROPERTIES']['HEADER_SIZE']['TOTAL_SIZE']
-        self.payload_size = int.from_bytes(self.payload_size, byteorder='little')
+        if type(self.payload_size) == bytes:
+            self.payload_size = int.from_bytes(self.payload_size, byteorder='little')
         payload_end = payload_start + self.payload_size
         self.payload_content = self.data[payload_start:payload_end]
 

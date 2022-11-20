@@ -52,14 +52,12 @@ bool SocketHandler::send_msg(uint8_t* buffer, size_t size) {
 	}
 	//char request[1024] = "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x01\x04\x4C\x00\x00\x00\xff\EDEN\x00";
 	
-	boost::asio::write(*this->s, boost::asio::buffer(buffer, 1024));
+	boost::asio::write(*this->s, boost::asio::buffer(buffer, size));
 	return true;
 }
 
 bool SocketHandler::recv_msg(uint8_t* buffer, size_t size) {
-	char buffu[1024] = { 0 };
-	boost::asio::read(*this->s, boost::asio::buffer(buffu, 1024));
-	std::cout << buffu << std::endl;
+	boost::asio::read(*this->s, boost::asio::buffer(buffer, size));
 	return true;
 }
 

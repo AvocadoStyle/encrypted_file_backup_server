@@ -41,6 +41,8 @@ void RequestsHandler::registration_request_handle(std::string name) {
 
 	// merge together the message
 	this->total_size = __CLIENT_ID_SIZE__ + __VERSION_SIZE__ + __CODE_SIZE__ + __PAYLOAD_SIZE_SIZE__ + __NAME_SIZE__;
+	this->header_size = __HEADER_SIZE__;
+	this->header_message = (uint8_t*)malloc(sizeof(uint8_t) * __HEADER_SIZE__);
 	this->build_message = (uint8_t*)malloc(this->total_size);
 	int *start;
 	start = (int*)malloc(sizeof(int));
@@ -62,7 +64,6 @@ void RequestsHandler::__set_build_message(int* start, uint8_t* section, int size
 	}
 	*start = *start + size_to_add;
 }
-
 
 /*
  * set the client_id to be a default value to send to the server, the server will generate the client id.

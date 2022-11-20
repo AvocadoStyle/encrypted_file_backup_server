@@ -55,10 +55,11 @@ class RequestHandler:
 
         # self.clients_db.insert_table(client_id_bytes, self.payload_content)
         # client = self.clients_db.get_client_by_id(client_id_bytes)
-
+        self.message_parser.name = content
         self.clients_db.insert_table(client_id_bytes, content)
         result = self.clients_db.get_client_by_id(client_id_bytes)
         print(f'id is: {result[0][0]} name is: {result[0][1]}')
+        print(f'name maybe: {self.message_parser.name}')
         print("now returning the uuid to the client: ")
         self.message_parser.client_id = client_id_bytes
 

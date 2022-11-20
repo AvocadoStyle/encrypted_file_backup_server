@@ -28,10 +28,19 @@ class MessageHandle:
 
         # get the header and payload content (only the data)
         self.__header_handle()
-        self.__payload_handle()
+        # self.__payload_handle()
 
         # handle the requests
         response_to_client_pack_header_and_payload = None  # @TODO get the response msg and send it to client
+        # self.__request_handle()
+        # self.__response_handle()  # header is the same
+
+    def message_handle_request(self):
+        """
+        gets the message and gets the payload size from it
+        """
+        self.__header_handle()
+        self.__payload_handle()
         self.__request_handle()
         self.__response_handle()  # header is the same
 
@@ -59,29 +68,6 @@ class MessageHandle:
         handle the response
         """
         self.response_handler.response_code_handle()
-
-
-
-
-    # def register_handle(self, data):
-    #     """
-    #     handle a register request
-    #     :return:
-    #     """
-    #
-    #
-    #
-    #
-    #     client_exist = self.clients_db.get_client_by_id(self, )
-    #
-    #     if client_exist:
-    #         pass  # will not create a new registration
-    #     else:
-    #         uuid_id = uuid.uuid4()
-    #         id_str = str(uuid_id)
-    #         id_bytes = uuid_id.bytes
-    #
-
 
 
 

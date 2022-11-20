@@ -11,6 +11,7 @@
 #define __CRC_NOT_VALID_LAST_X__		1106
 
 /*                  HEADERS                                */
+#define __HEADER_SIZE__					23 
 #define __CLIENT_ID_SIZE__				16
 #define __VERSION_SIZE__				1
 #define __CODE_SIZE__					2
@@ -28,9 +29,11 @@ public:
 	uint8_t		version[__VERSION_SIZE__];
 	uint8_t		code[__CODE_SIZE__];
 	uint8_t		payload_size[__PAYLOAD_SIZE_SIZE__];
+	uint8_t*	header_message;
 	uint8_t*	payload;
 	uint8_t*	build_message;
 	int			total_size;
+	int			header_size;
 
 
 	RequestsHandler();

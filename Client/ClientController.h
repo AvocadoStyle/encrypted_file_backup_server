@@ -4,6 +4,7 @@
 #include <string>
 #include "SocketHandler.h"
 #include "RequestsHandler.h"
+#include "ResponseHandler.h"
 #include "FileHandler.h"
 #include "FileUtilities.h"
 
@@ -15,6 +16,7 @@ public:
 	std::string file_name;
 	SocketHandler *s;
 	RequestsHandler *req_handler;
+	ResponseHandler *res_handler;
 	FileHandler* file_handler;
 	FileUtilities* file_utilities;
 
