@@ -103,6 +103,7 @@ bool ClientController::authentication() {
 
 	/*                 send message with name and public key                      */
 	s->connect(this->address, this->port);
+
 }
 
 
