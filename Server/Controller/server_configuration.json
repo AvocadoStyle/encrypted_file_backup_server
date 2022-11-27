@@ -82,11 +82,36 @@
             }
         },
         "RESPONSE_CODE": {
-            "REGISTRATION_SUCCESS_RESPONSE": 2100,
-            "REGISTRATION_FAILED_RESPONSE": 2101,
-            "SEND_AES_KEY_RESPONSE": 2102,
-            "FILE_RECEIVED_CRC_SUCCESS_RESPONSE": 2103,
-            "ACCESS_MESSAGE_RESPONSE": 2104
+            "REGISTRATION_SUCCESS_RESPONSE": {
+                "CODE": 2100,
+                "FIELD": {
+                    "CLIENT_ID": 16
+                }
+            },
+            "REGISTRATION_FAILED_RESPONSE": {
+                "CODE": 2101,
+                "FIELD": {
+                    "CLIENT_ID": 16
+                }
+            },
+            "SEND_AES_KEY_RESPONSE": {
+                "CODE": 2102,
+                "FIELD": {
+                    "CLIENT_ID": 16
+                }
+            },
+            "FILE_RECEIVED_CRC_SUCCESS_RESPONSE": {
+                "CODE": 2103,
+                "FIELD": {
+                    "CLIENT_ID": 16
+                }
+            },
+            "ACCESS_MESSAGE_RESPONSE": {
+                "CODE": 2104,
+                "FIELD": {
+                    "CLIENT_ID": 16
+                }
+            }
         }
     }
 }

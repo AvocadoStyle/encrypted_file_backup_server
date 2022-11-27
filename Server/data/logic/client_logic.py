@@ -16,5 +16,6 @@ class ClientLogic:
         check protocl validation of the input
         :return:
         """
-        print(data.utilities_data.load_data_size())
+        # print(data.utilities_data.load_data_size())
+        pass
 

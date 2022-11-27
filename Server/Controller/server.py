@@ -1,9 +1,9 @@
 import importlib
 import socket
+import struct
 import threading
 import Controller.utilities_controller
 from data import Clients, Files
-
 
 class Server:
     def __init__(self, host, port):
@@ -37,9 +37,34 @@ class Server:
         :param addr: address of the client
         """
         connection = True
-        message_length = self.server_config['MESSAGE_PROPERTIES']['MESSAGE_LENGTH']
-        data = conn.recv(message_length)
-        self.__init_message_handler(data)
+        message_header_length = self.server_config['MESSAGE_PROPERTIES']['HEADER_SIZE']['TOTAL_SIZE']
+
+        # header data received
+        data_header = conn.recv(message_header_length)
+        message_handler = self.__init_message_handler(data_header)
+        size = message_handler.message_parser.payload_size
+        size = int.from_bytes(size, byteorder='little') + message_header_length
+        data = conn.recv(size)
+        self.__init_all_message(message_handler, data)
+
+        # response handler
+        response_data_header = message_handler.message_parser.response_data_header
+        response_data = message_handler.message_parser.response_data
+        message_header_length = self.server_config['MESSAGE_PROPERTIES']['HEADER_SIZE_RESPONSE']['TOTAL_SIZE']
+        conn.sendall(response_data_header)
+        conn.sendall(response_data)
+
+        # a = 1
+        # bt2 = int.to_bytes(a, byteorder='big', length=1001)
+        # bt3 = struct.pack('23s1001s', message_handler.message_parser.response_data, bt2)
+        # conn.sendall(message_handler.message_parser.response_data)
+        # conn.sendall(bt3)
+
+
+
+
+
+
         conn.close()
 
     def __init_message_handler(self, data):
@@ -52,14 +77,17 @@ class Server:
         message_handler_obj = getattr(message_handler_module, f"MessageHandle")
         message_handler = message_handler_obj(data, self.server_config, self.database)
         message_handler.message_handle_main()
+        return message_handler
 
-        # while connection:
-        #     data = conn.recv(message_length)
-        #     print(f"data is: {data}" )
-        #     conn.sendall(b'you are gay!')
-        #     conn.close()
-        #     connection = False
-        # exit(1)
+    def __init_all_message(self, message_handler, data):
+        """
+        dynamic message requests handler and responses
+        """
+        message_handler.data = data
+        message_handler.message_parser.data = data
+        message_handler.message_handle_request()
+
+
 
     def init_db(self):
         """

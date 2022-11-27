@@ -1,5 +1,5 @@
 import uuid
-from parser_data import MessageParser, RequestHandler
+from parser_data import MessageParser, RequestHandler, ResponseHandler
 
 class MessageHandle:
     def __init__(self, data, server_config, database):
@@ -16,6 +16,8 @@ class MessageHandle:
         self.files_db = database['files_db']
         self.message_parser = MessageParser(self.data, self.server_config)
         self.request_handler = RequestHandler(self.message_parser, self.clients_db, self.files_db)
+        # ryh
+        self.response_handler = ResponseHandler(self.message_parser)
 
     def message_handle_main(self):
         """
@@ -26,11 +28,21 @@ class MessageHandle:
 
         # get the header and payload content (only the data)
         self.__header_handle()
-        self.__payload_handle()
+        # self.__payload_handle()
 
         # handle the requests
-        self.__request_handle()
         response_to_client_pack_header_and_payload = None  # @TODO get the response msg and send it to client
+        # self.__request_handle()
+        # self.__response_handle()  # header is the same
+
+    def message_handle_request(self):
+        """
+        gets the message and gets the payload size from it
+        """
+        self.__header_handle()
+        self.__payload_handle()
+        self.__request_handle()
+        self.__response_handle()  # header is the same
 
     def __header_handle(self):
         """
@@ -51,28 +63,11 @@ class MessageHandle:
         """
         self.request_handler.request_code_handle()
 
-
-
-
-    # def register_handle(self, data):
-    #     """
-    #     handle a register request
-    #     :return:
-    #     """
-    #
-    #
-    #
-    #
-    #     client_exist = self.clients_db.get_client_by_id(self, )
-    #
-    #     if client_exist:
-    #         pass  # will not create a new registration
-    #     else:
-    #         uuid_id = uuid.uuid4()
-    #         id_str = str(uuid_id)
-    #         id_bytes = uuid_id.bytes
-    #
-
+    def __response_handle(self):
+        """
+        handle the response
+        """
+        self.response_handler.response_code_handle()
 
 
 
