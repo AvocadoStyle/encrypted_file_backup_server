@@ -1,5 +1,6 @@
 #include "FileUtilities.h"
 #include <iostream>
+
 FileUtilities::FileUtilities() {
 
 }
@@ -32,8 +33,16 @@ bool FileUtilities::file_write(uint8_t* file_name) {
 	return true;
 }
 
-bool FileUtilities::is_file_exists(uint8_t* file_name) {
-	char* dst = reinterpret_cast<char*>(file_name);
+bool FileUtilities::is_file_exists(char* file_name) {
+	if (FILE* file = fopen(file_name, "r")) {
+		fclose(file);
+		return true;
+	}
+	else {
+		return false;
+	}
+
+
 	return true;
 }
 

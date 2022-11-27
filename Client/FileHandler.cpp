@@ -10,7 +10,85 @@ FileHandler::FileHandler() {
 FileHandler::~FileHandler() {
 
 }
-std::string FileHandler::read_address_from_file() {
+
+/*                      after register                                         */
+
+/*                      after register write info                              */
+bool FileHandler::write_registration_info_file(std::string name, std::string client_id_ascii_hex,
+	std::string private_key_base_64) {
+	std::ofstream file_w("me.info");
+	file_w << name << '\n' << client_id_ascii_hex << '\n' << private_key_base_64;
+}
+
+
+
+
+
+
+
+
+
+/*                      after register read info                              */
+bool FileHandler::is_client_register_info_exists() {
+	char client_register_file[] = CLIENT_INFO;
+	return this->file_utilities->is_file_exists(client_register_file);
+}
+
+/*
+ * read name from registration file 
+ */
+std::string FileHandler::read_name_from_register_file_info() {
+	uint8_t* content = this->__read_client_register_info_file();
+	char* con = reinterpret_cast<char*>(content);
+	std::string cntnt = con;
+
+	std::string del = "\n";
+	size_t name_start = 0;
+	size_t name_end = cntnt.find(del);
+
+	std::string name = cntnt.substr(name_start, name_end);
+	return name;
+}
+
+/*
+ * read client_id from registration file
+ */
+std::string FileHandler::read_client_id_from_register_file_info() {
+	uint8_t* content = this->__read_client_register_info_file();
+	char* con = reinterpret_cast<char*>(content);
+	std::string cntnt = con;
+
+	std::string del = "\n";
+	size_t client_id_start = cntnt.find(del) + 1;
+	std::string client_id_s = cntnt.substr(client_id_start, CLIENT_ID_HEX_SIZE);
+	return client_id_s;
+}
+
+/*
+ * read private key from registration file
+ */
+std::string FileHandler::read_private_key_64_from_register_file_info() {
+	uint8_t* content = this->__read_client_register_info_file();
+	char* con = reinterpret_cast<char*>(content);
+	std::string cntnt = con;
+
+	std::string del = "\n";
+	size_t private_key_start = cntnt.find(del) + 1 + CLIENT_ID_HEX_SIZE + 1;
+
+	std::string private_key_s = cntnt.substr(private_key_start);
+	size_t private_key_end = private_key_s.find(del);
+	return cntnt.substr(private_key_start, private_key_end);
+}
+
+
+
+/*                    before register                                                                */
+/*                      before register read info from initial info file                             */
+
+/*
+ * reads the address from the initial file
+ */
+std::string FileHandler::read_address_from_file_info() {
 	uint8_t* content = this->__read_client_instruction_file();
 	char* con = reinterpret_cast<char*>(content);
 	std::string cntnt = con;
@@ -20,7 +98,11 @@ std::string FileHandler::read_address_from_file() {
 	return token_address;
 	//return this->file_utilities->string_to_uint8_t(token_address);
 }
-std::string FileHandler::read_port_from_file() {
+
+/*
+ * reads the port from the initial file
+ */
+std::string FileHandler::read_port_from_file_info() {
 	uint8_t* content = this->__read_client_instruction_file();
 	char* con = reinterpret_cast<char*>(content);
 	std::string cntnt = con;
@@ -31,8 +113,10 @@ std::string FileHandler::read_port_from_file() {
 	std::string token_port = cntnt.substr(port_start, port_end-port_start);
 	return token_port;
 }
-
-std::string FileHandler::read_name_from_file() {
+/*
+ * read the name of the user from the initial file
+ */
+std::string FileHandler::read_name_from_file_info() {
 	uint8_t* content = this->__read_client_instruction_file();
 	char* con = reinterpret_cast<char*>(content);
 	std::string cntnt = con;
@@ -46,7 +130,10 @@ std::string FileHandler::read_name_from_file() {
 	return token_name;
 }
 
-std::string FileHandler::read_file_path_from_file() {
+/*
+ * reads the file path from the initial file
+ */
+std::string FileHandler::read_file_path_from_file_info() {
 	uint8_t* content = this->__read_client_instruction_file();
 	char* con = reinterpret_cast<char*>(content);
 	std::string cntnt = con;
@@ -61,8 +148,25 @@ std::string FileHandler::read_file_path_from_file() {
 	return file_name;
 }
 
+/* read client initial instruction file before registration
+ * will read it from the file utilities
+ * :return: uint8_t* value of the read file
+ */
 uint8_t* FileHandler::__read_client_instruction_file() {
 	std::string client_instruction = CLIENT_INSTRUCTION;
+	size_t len = client_instruction.length();
+	uint8_t* client_instruction_file_name = (uint8_t*)malloc(sizeof(uint8_t) * len);
+	memcpy(client_instruction_file_name, client_instruction.c_str(), len);
+	client_instruction_file_name[len] = '\0';
+	return file_utilities->file_read(client_instruction_file_name);
+}
+
+/* read the client details after registration.
+ * there is the initial value of the registration of name and client id.
+ * and there is the last value of the name client id and private key.
+ */
+uint8_t* FileHandler::__read_client_register_info_file() {
+	std::string client_instruction = CLIENT_INFO;
 	size_t len = client_instruction.length();
 	uint8_t* client_instruction_file_name = (uint8_t*)malloc(sizeof(uint8_t) * len);
 	memcpy(client_instruction_file_name, client_instruction.c_str(), len);

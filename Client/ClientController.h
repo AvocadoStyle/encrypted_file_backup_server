@@ -8,6 +8,7 @@
 #include "FileHandler.h"
 #include "FileUtilities.h"
 
+
 class ClientController {
 public:
 	std::string port;
@@ -25,7 +26,7 @@ public:
 
 	void initialize();
 	bool registration();
-
+	bool authentication();
 
 };
 

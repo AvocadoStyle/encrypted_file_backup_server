@@ -8,7 +8,7 @@ RequestsHandler::~RequestsHandler() {
 
 }
 /*
- * take care of the registration request
+ * take care of the registration request - build a message to send to the server
  * taking care about header request
  * client id: will initialize it, the server will give it as response
  * version: will not take care in the registration request
@@ -54,6 +54,35 @@ void RequestsHandler::registration_request_handle(std::string name) {
 	this->__set_build_message(start, this->payload, __NAME_SIZE__);
 }
 
+/* handle the authentication request and build entire message to send to the server 
+ * take of the header request and for the payload including:
+ * header:
+ * client_id:	will be placed from the previous registration request.
+ * version:		will set to default value.
+ * code:		will set the code value as expected for the authentication request.
+ * payload size: will contain the payload size - from the payload: name, public_key
+ * payload:
+ * name:		contain the name of the user that previously registered.
+ * public_key	contain the public_key that previous registered and will be generated from the private key 
+ * that will supplied as argument.
+ */
+void RequestsHandler::authentication_request_handle(uint8_t client_id[], uint8_t name[], uint8_t* private_key) {
+
+}
+
+/* generates the rsa key public.
+ *
+ */
+void RequestsHandler::generate_rsa_public_key() {
+	this->public_key = "abcd";
+}
+/* generates the rsa key private.
+ *
+ */
+void RequestsHandler::generate_rsa_private_key() {
+	this->private_key = "1234";
+}
+
 /*
  * set the final build_meesage to be send to the server
  */
@@ -81,4 +110,3 @@ void RequestsHandler::__set_version_id_default() {
 		this->version[i] = '\x00';
 	}
 }
-

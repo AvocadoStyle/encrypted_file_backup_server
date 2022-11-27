@@ -25,21 +25,27 @@
 
 class RequestsHandler {
 public:
-	uint8_t		client_id[__CLIENT_ID_SIZE__];
-	uint8_t		version[__VERSION_SIZE__];
-	uint8_t		code[__CODE_SIZE__];
-	uint8_t		payload_size[__PAYLOAD_SIZE_SIZE__];
-	uint8_t*	header_message;
-	uint8_t*	payload;
-	uint8_t*	build_message;
-	int			total_size;
-	int			header_size;
+	uint8_t			client_id[__CLIENT_ID_SIZE__];
+	uint8_t			version[__VERSION_SIZE__];
+	uint8_t			code[__CODE_SIZE__];
+	uint8_t			payload_size[__PAYLOAD_SIZE_SIZE__];
+	uint8_t			name[__NAME_SIZE__];
+	uint8_t*		header_message;
+	uint8_t*		payload;
+	uint8_t*		build_message;
+	int				total_size;
+	int				header_size;
+	std::string		public_key;
+	std::string		private_key;
 
 
 	RequestsHandler();
 	~RequestsHandler();
 
 	void registration_request_handle(std::string name);
+	void authentication_request_handle(uint8_t client_id[], uint8_t name[], uint8_t* private_key);
+	void generate_rsa_public_key();
+	void generate_rsa_private_key();
 
 private:
 	void __set_build_message(int* start, uint8_t* section, int size_to_add);

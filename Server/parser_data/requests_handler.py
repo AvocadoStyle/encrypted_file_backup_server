@@ -43,19 +43,22 @@ class RequestHandler:
         """
         registration request - save to the Clients DB
             - new uuid generated
-            - the Name from the content 255bytes including null terminator
+            - if the Name from the content does not exists in the DB it will insert it to the DB else it will throw
+                an exception and send error as response
         :return:
         """
         # generate uuid
         client_id = uuid.uuid4()
         client_id_bytes = client_id.bytes
 
-        # insert the UUID with the NAME to the DB
+        # insert the UUID with the NAME to the DB if the name is not exists
         content = self.payload_content # name
-
-        # self.clients_db.insert_table(client_id_bytes, self.payload_content)
-        # client = self.clients_db.get_client_by_id(client_id_bytes)
         self.message_parser.name = content
+
+
+
+
+
         self.clients_db.insert_table(client_id_bytes, content)
         result = self.clients_db.get_client_by_id(client_id_bytes)
         print(f'id is: {result[0][0]} name is: {result[0][1]}')
