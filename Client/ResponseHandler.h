@@ -1,6 +1,9 @@
 #ifndef __RESPONSEHANDLER_H__
 #define __RESPONSEHANDLER_H__
 #include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <string>
 
 #define __REGISTRATION_RES__				2100
 #define __REGISTRATION_FAILED_RES__			2101
@@ -31,6 +34,7 @@ public:
 	uint8_t				name[__NAME_SIZE__];
 	uint8_t				public_key[__PK_SIZE__];
 	uint8_t				client_id[__CLIENT_ID_SIZE__];
+	std::string			client_id_st_hex;
 	unsigned int*		int_code;
 	int					total_size;
 	int					header_size;
@@ -54,6 +58,7 @@ public:
 
 private:
 	void __set_message(int* start, uint8_t* insert_to, uint8_t* insert_from, int size_to_add);
+	void __set_client_id_str_hex();
 };
 
 

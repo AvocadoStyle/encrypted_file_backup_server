@@ -58,3 +58,14 @@ void ResponseHandler::__set_message(int* start, uint8_t* insert_to, uint8_t* ins
 	*start = *start + size_to_add;
 
 }
+
+void ResponseHandler::__set_client_id_str_hex() {
+	this->client_id;
+	std::stringstream ss;
+	ss << std::hex;
+
+	for (int i = 0; i < __CLIENT_ID_SIZE__; i++) {
+		ss << std::setw(2) << std::setfill('0') << (int)this->client_id[i];
+	}
+	this->client_id_st_hex = ss.str();
+}

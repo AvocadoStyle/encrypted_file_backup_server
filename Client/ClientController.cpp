@@ -28,6 +28,8 @@ void ClientController::initialize() {
 	// will read from the registration info file
 	if (this->file_handler->is_client_register_info_exists()){
 		this->name = this->file_handler->read_name_from_register_file_info();
+		this->client_id = this->file_handler->read_client_id_from_register_file_info();
+		this->private_key_base64 = this->file_handler->read_private_key_64_from_register_file_info();
 	} else {
 		this->name = this->file_handler->read_name_from_file_info();
 	}
@@ -102,7 +104,15 @@ bool ClientController::authentication() {
 	}
 
 	/*                 send message with name and public key                      */
+	// initialize will set the values as represented in the file with string:
+	// name, client_id, private_key 
+	this->initialize();
+
 	s->connect(this->address, this->port);
+
+
+
+
 
 }
 

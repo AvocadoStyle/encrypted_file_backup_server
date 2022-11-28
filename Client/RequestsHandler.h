@@ -2,6 +2,7 @@
 #define __REQUESTHANDLER_H__
 
 #include <iostream>
+#include <boost/algorithm/hex.hpp>
 
 #define __REGISTRATION__				1100
 #define __SEND_PK__						1101
@@ -38,7 +39,6 @@ public:
 	std::string		public_key;
 	std::string		private_key;
 
-
 	RequestsHandler();
 	~RequestsHandler();
 
@@ -51,6 +51,9 @@ private:
 	void __set_build_message(int* start, uint8_t* section, int size_to_add);
 	void __set_client_id_default();
 	void __set_version_id_default();
+	void __set_name_from_str_name(std::string name_str);
+	void __set_client_id_from_str_hex_client_id(std::string client_id_str_hex);
+	void __set_private_key_from_str_base64_private_key(std::string private_key_str_base64);
 
 
 };

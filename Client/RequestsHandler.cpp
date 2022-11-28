@@ -110,3 +110,30 @@ void RequestsHandler::__set_version_id_default() {
 		this->version[i] = '\x00';
 	}
 }
+
+/*
+ * set the name from the str name include null terminator 
+ */
+void RequestsHandler::__set_name_from_str_name(std::string name_str) {
+	for (int i = 0; i < __NAME_SIZE__; i++) {
+		this->name[i] = (uint8_t)(name_str.c_str()[i]);
+	}
+}
+
+/*
+ * client_id from hex str to bytes
+ */
+void RequestsHandler::__set_client_id_from_str_hex_client_id(std::string client_id_str_hex) {
+	std::string hash = boost::algorithm::unhex(client_id_str_hex);
+	std::copy(hash.begin(), hash.end(), this->client_id);
+}
+
+/*
+ * @TODO
+ */
+void RequestsHandler::__set_private_key_from_str_base64_private_key(std::string private_key_str_base64) {
+	for (int i = 0; i < __NAME_SIZE__; i++) {
+		this->version[i] = '\x00';
+	}
+}
+
