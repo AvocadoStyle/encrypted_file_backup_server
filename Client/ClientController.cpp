@@ -69,7 +69,7 @@ bool ClientController::registration(){
 	// parse the response header message
 	this->res_handler->init_response_header(receive_buffer_header_response);
 	// receive response message header+payload
-	uint8_t* receive_buffer_payload_response;
+	//uint8_t* receive_buffer_payload_response;
 	size_t payload_response_size = *this->res_handler->int_payload_size; // the size of the response payload
 	// initialize the buffer to be the header + the payload size
 	receive_buffer_header_response = (uint8_t*)malloc(sizeof(uint8_t) * (header_response_size + payload_response_size));
@@ -84,12 +84,11 @@ bool ClientController::registration(){
 
 	/*  create client info file including name, client_id ascii hex presentation, and private key in base64    */
 	//name from the file info, 
-	//std::string client_id_st = this->res_handler->client_id;
-	this->res_handler->client_id[16] = '\0';
-	std::string client_id_st = reinterpret_cast<char*>(res_handler->client_id);
+	// will set the client_id bytes to string hex to insert it in the future to the registration info file
+	this->res_handler->set_client_id_str_hex();
+	std::string client_id_st = this->res_handler->client_id_st_hex;
 	std::string private_key_st = this->req_handler->private_key;
 	this->file_handler->write_registration_info_file(this->name, client_id_st, private_key_st);
-
 	return true;
 }
 

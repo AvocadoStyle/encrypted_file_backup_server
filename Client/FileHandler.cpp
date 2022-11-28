@@ -16,8 +16,14 @@ FileHandler::~FileHandler() {
 /*                      after register write info                              */
 bool FileHandler::write_registration_info_file(std::string name, std::string client_id_ascii_hex,
 	std::string private_key_base_64) {
-	std::ofstream file_w("me.info");
-	file_w << name << '\n' << client_id_ascii_hex << '\n' << private_key_base_64;
+	try {
+		std::ofstream file_w("me.info");
+		file_w << name << '\n' << client_id_ascii_hex << '\n' << private_key_base_64;
+		return true;
+	}
+	catch (const std::exception& e) {
+		return false;
+	}
 }
 
 

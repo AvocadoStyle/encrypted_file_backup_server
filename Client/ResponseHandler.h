@@ -12,7 +12,7 @@
 #define __ACCEPT_MSG_RES__					2104
 
 /*                  HEADERS                                */
-#define __HEADER_SIZE__					7 
+#define __HEADER_RES_SIZE__					7 
 #define __CLIENT_ID_SIZE__				16
 #define __VERSION_SIZE__				1
 #define __CODE_SIZE__					2
@@ -26,7 +26,7 @@
 
 class ResponseHandler {
 public:
-	size_t				HEADER_SIZE_PATTERN = __HEADER_SIZE__;
+	size_t				HEADER_SIZE_PATTERN = __HEADER_RES_SIZE__;
 	uint8_t				version[__VERSION_SIZE__];
 	uint8_t				code[__CODE_SIZE__];
 	uint8_t				payload_size[__PAYLOAD_SIZE_SIZE__];
@@ -52,13 +52,13 @@ public:
 	// payload response handler:
 	void response_code_handler(uint8_t* buffer_header_and_payload);
 	void registration_response_handle(uint8_t* buffer_header_and_payload);
+	void set_client_id_str_hex();
 
 
 
 
 private:
 	void __set_message(int* start, uint8_t* insert_to, uint8_t* insert_from, int size_to_add);
-	void __set_client_id_str_hex();
 };
 
 

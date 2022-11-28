@@ -16,6 +16,7 @@ void ResponseHandler::registration_response_handle(uint8_t* buffer_header_and_pa
 	*start = this->payload_start;
 	// setting the client_id from the buffer
 	this->__set_message(start, this->client_id, buffer_header_and_payload, __CLIENT_ID_SIZE__);
+	this->client_id[__CLIENT_ID_SIZE__] = '\0';
 }
 
 void ResponseHandler::response_code_handler(uint8_t* buffer_header_and_payload) {
@@ -39,12 +40,17 @@ void ResponseHandler::init_response_header(uint8_t* header) {
 	start = (int*)malloc(sizeof(int));
 	*start = 0;
 	this->header_size = __VERSION_SIZE__ + __CODE_SIZE__ + __PAYLOAD_SIZE_SIZE__;
-	this->payload_start = this->header_size + 1;
+	this->payload_start = this->header_size;
 	this->__set_message(start, this->version, header, __VERSION_SIZE__);
 	this->__set_message(start, this->code, header, __CODE_SIZE__);
+
+	uint8_t temp = this->code[0];
+	this->code[0] = this->code[1];
+	this->code[1] = temp;
+
 	this->__set_message(start, this->payload_size, header, __PAYLOAD_SIZE_SIZE__);
 	int_payload_size = (int*)malloc(sizeof(int));
-	int_code = (unsigned int*)calloc(sizeof(unsigned int), 0);
+	int_code = (unsigned int*)calloc(sizeof(unsigned int), sizeof(unsigned int));
 	memcpy(int_payload_size, (int*)&this->payload_size, __PAYLOAD_SIZE_SIZE__);
 	memcpy(int_code, (unsigned int*)&this->code, __CODE_SIZE__);
 
@@ -59,7 +65,7 @@ void ResponseHandler::__set_message(int* start, uint8_t* insert_to, uint8_t* ins
 
 }
 
-void ResponseHandler::__set_client_id_str_hex() {
+void ResponseHandler::set_client_id_str_hex() {
 	std::stringstream ss;
 	ss << std::hex;
 
