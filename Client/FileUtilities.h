@@ -1,6 +1,6 @@
 #ifndef __FILEUTILITIES_H__
 #define __FILEUTILITIES_H__
-
+#define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <fstream>
 #include <filesystem>

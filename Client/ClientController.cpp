@@ -25,9 +25,12 @@ void ClientController::initialize() {
 	this->port	       = this->file_handler->read_port_from_file_info();
 	this->file_name    = this->file_handler->read_file_path_from_file_info();
 
-	// will read from the registration info file
+	// will read from the registration info file and initialize all of the Request Handler object 
 	if (this->file_handler->is_client_register_info_exists()){
 		this->name = this->file_handler->read_name_from_register_file_info();
+		this->client_id = this->file_handler->read_client_id_from_register_file_info();
+		this->private_key_base64 = this->file_handler->read_private_key_64_from_register_file_info();
+		this->req_handler->initialize_fields_from_register_file_info();
 	} else {
 		this->name = this->file_handler->read_name_from_file_info();
 	}
@@ -42,7 +45,7 @@ void ClientController::initialize() {
  * :exception: will be throwned if the client registration not succed due to any issue in the action of registration.
  */
 bool ClientController::registration(){
-	// check if there is past registration of the client and will return true if does.
+	/* check if there is past registration of the clientand will return true if does. */
 	if (this->file_handler->is_client_register_info_exists()) {
 		return true;
 	}
@@ -67,7 +70,7 @@ bool ClientController::registration(){
 	// parse the response header message
 	this->res_handler->init_response_header(receive_buffer_header_response);
 	// receive response message header+payload
-	uint8_t* receive_buffer_payload_response;
+	//uint8_t* receive_buffer_payload_response;
 	size_t payload_response_size = *this->res_handler->int_payload_size; // the size of the response payload
 	// initialize the buffer to be the header + the payload size
 	receive_buffer_header_response = (uint8_t*)malloc(sizeof(uint8_t) * (header_response_size + payload_response_size));
@@ -82,12 +85,11 @@ bool ClientController::registration(){
 
 	/*  create client info file including name, client_id ascii hex presentation, and private key in base64    */
 	//name from the file info, 
-	//std::string client_id_st = this->res_handler->client_id;
-	this->res_handler->client_id[16] = '\0';
-	std::string client_id_st = reinterpret_cast<char*>(res_handler->client_id);
+	// will set the client_id bytes to string hex to insert it in the future to the registration info file
+	this->res_handler->set_client_id_str_hex();
+	std::string client_id_st = this->res_handler->client_id_st_hex;
 	std::string private_key_st = this->req_handler->private_key;
 	this->file_handler->write_registration_info_file(this->name, client_id_st, private_key_st);
-
 	return true;
 }
 
@@ -100,9 +102,16 @@ bool ClientController::authentication() {
 	if (!this->file_handler->is_client_register_info_exists()) {
 		return false;
 	}
-
+	
 	/*                 send message with name and public key                      */
+	// initialize will set the values as represented in the file with string:
+	// name, client_id, private_key 
+	this->initialize();
 	s->connect(this->address, this->port);
+
+	
+
+
 
 }
 

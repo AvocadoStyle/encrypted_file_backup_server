@@ -14,6 +14,8 @@ public:
 	std::string port;
 	std::string address;
 	std::string name;
+	std::string client_id;
+	std::string private_key_base64;
 	std::string file_name;
 	SocketHandler *s;
 	RequestsHandler *req_handler;

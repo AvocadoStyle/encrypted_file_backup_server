@@ -1,6 +1,9 @@
 #ifndef __RESPONSEHANDLER_H__
 #define __RESPONSEHANDLER_H__
 #include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <string>
 
 #define __REGISTRATION_RES__				2100
 #define __REGISTRATION_FAILED_RES__			2101
@@ -9,7 +12,7 @@
 #define __ACCEPT_MSG_RES__					2104
 
 /*                  HEADERS                                */
-#define __HEADER_SIZE__					7 
+#define __HEADER_RES_SIZE__					7 
 #define __CLIENT_ID_SIZE__				16
 #define __VERSION_SIZE__				1
 #define __CODE_SIZE__					2
@@ -23,7 +26,7 @@
 
 class ResponseHandler {
 public:
-	size_t				HEADER_SIZE_PATTERN = __HEADER_SIZE__;
+	size_t				HEADER_SIZE_PATTERN = __HEADER_RES_SIZE__;
 	uint8_t				version[__VERSION_SIZE__];
 	uint8_t				code[__CODE_SIZE__];
 	uint8_t				payload_size[__PAYLOAD_SIZE_SIZE__];
@@ -31,6 +34,7 @@ public:
 	uint8_t				name[__NAME_SIZE__];
 	uint8_t				public_key[__PK_SIZE__];
 	uint8_t				client_id[__CLIENT_ID_SIZE__];
+	std::string			client_id_st_hex;
 	unsigned int*		int_code;
 	int					total_size;
 	int					header_size;
@@ -48,6 +52,7 @@ public:
 	// payload response handler:
 	void response_code_handler(uint8_t* buffer_header_and_payload);
 	void registration_response_handle(uint8_t* buffer_header_and_payload);
+	void set_client_id_str_hex();
 
 
 
