@@ -25,11 +25,12 @@ void ClientController::initialize() {
 	this->port	       = this->file_handler->read_port_from_file_info();
 	this->file_name    = this->file_handler->read_file_path_from_file_info();
 
-	// will read from the registration info file
+	// will read from the registration info file and initialize all of the Request Handler object 
 	if (this->file_handler->is_client_register_info_exists()){
 		this->name = this->file_handler->read_name_from_register_file_info();
 		this->client_id = this->file_handler->read_client_id_from_register_file_info();
 		this->private_key_base64 = this->file_handler->read_private_key_64_from_register_file_info();
+		this->req_handler->initialize_fields_from_register_file_info();
 	} else {
 		this->name = this->file_handler->read_name_from_file_info();
 	}
@@ -44,7 +45,7 @@ void ClientController::initialize() {
  * :exception: will be throwned if the client registration not succed due to any issue in the action of registration.
  */
 bool ClientController::registration(){
-	// check if there is past registration of the client and will return true if does.
+	/* check if there is past registration of the clientand will return true if does. */
 	if (this->file_handler->is_client_register_info_exists()) {
 		return true;
 	}
@@ -101,15 +102,14 @@ bool ClientController::authentication() {
 	if (!this->file_handler->is_client_register_info_exists()) {
 		return false;
 	}
-
+	
 	/*                 send message with name and public key                      */
 	// initialize will set the values as represented in the file with string:
 	// name, client_id, private_key 
 	this->initialize();
-
 	s->connect(this->address, this->port);
 
-
+	
 
 
 
