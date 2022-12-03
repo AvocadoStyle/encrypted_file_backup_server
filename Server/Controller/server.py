@@ -40,6 +40,7 @@ class Server:
         message_header_length = self.server_config['MESSAGE_PROPERTIES']['HEADER_SIZE']['TOTAL_SIZE']
 
         # header data received
+        #
         data_header = conn.recv(message_header_length)
         message_handler = self.__init_message_handler(data_header)
         size = message_handler.message_parser.payload_size

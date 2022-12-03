@@ -99,7 +99,7 @@ void RequestsHandler::registration_request_handle(std::string name) {
  * that will supplied as argument.
  */
 void RequestsHandler::authentication_request_handle() {
-
+	try {
 	// initialize the name, client_id, private_key
 	this->initialize_fields_from_register_file_info();
 
@@ -108,7 +108,7 @@ void RequestsHandler::authentication_request_handle() {
 	this->__set_version_id_default();
 	// set code for registration
 	int reg_request_number_code = __SEND_PK__;
-	memcpy(this->code, (uint8_t*)&reg_request_number_code, __SEND_PK__);
+	memcpy(this->code, (uint8_t*)&reg_request_number_code, __CODE_SIZE__);
 	// set fixed payload size: name + public_key
 	int payload_fixed_size = __NAME_SIZE__ + __PK_SIZE__;
 	this->__set_payload_fixed_size(payload_fixed_size);
@@ -121,7 +121,7 @@ void RequestsHandler::authentication_request_handle() {
 		this->payload[i] = this->name[i];
 	}
 	i = __NAME_SIZE__;
-	for (int j=0;i < __SEND_PK__; i++, j++) {
+	for (int j=0;i < __NAME_SIZE__+__PK_SIZE__; i++, j++) {
 		this->payload[i] = this->public_key_bytes[j];
 	}
 
@@ -130,8 +130,7 @@ void RequestsHandler::authentication_request_handle() {
 	// merge together the message
 	this->total_size = __CLIENT_ID_SIZE__ + __VERSION_SIZE__ + __CODE_SIZE__ + __PAYLOAD_SIZE_SIZE__ + __NAME_SIZE__ + __PK_SIZE__;
 	this->header_size = __HEADER_SIZE__;
-	this->header_message = (uint8_t*)malloc(sizeof(uint8_t) * __HEADER_SIZE__);
-	this->build_message = (uint8_t*)malloc(this->total_size);
+	this->build_message = (uint8_t*)malloc(sizeof(uint8_t) * total_size);
 	int* start;
 	start = (int*)malloc(sizeof(int));
 	*start = 0;
@@ -140,15 +139,20 @@ void RequestsHandler::authentication_request_handle() {
 	this->__set_build_message(start, this->code, __CODE_SIZE__);
 	this->__set_build_message(start, this->payload_size, __PAYLOAD_SIZE_SIZE__);
 	this->__set_build_message(start, this->payload, __NAME_SIZE__+__PK_SIZE__);
+
+	}
+	catch (...) {
+		return;
+	}
 }
 
 /* generates the rsa key public.
  *
  */
 void RequestsHandler::generate_rsa_public_key() {
-	this->public_key = "abcdefg";
-	for (int i = 0; i < this->public_key.length(); i++) {
-		this->public_key_bytes[i] = this->public_key.c_str()[i];
+	std::string pkk = "abcdefg";
+	for (int i = 0; i < pkk.length(); i++) {
+		this->public_key_bytes[i] = pkk.c_str()[i];
 	}
 }
 /* generates the rsa key private.

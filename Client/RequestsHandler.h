@@ -4,6 +4,8 @@
 #include <iostream>
 #include <boost/algorithm/hex.hpp>
 #include "FileHandler.h"
+//#include <stdlib.h>
+//#include "stdlib.h"
 
 #define __REGISTRATION__				1100
 #define __SEND_PK__						1101
@@ -36,10 +38,12 @@ public:
 	uint8_t*		header_message;
 	uint8_t*		payload;
 	uint8_t*		build_message;
+	uint8_t*		build_message_n;
+
 	uint8_t			public_key_bytes[__PK_SIZE__];
 	int				total_size;
 	int				header_size;
-	std::string		public_key;
+	std::string		public_key = "";
 	std::string		private_key;
 	std::string		client_id_st_hex;
 	std::string		name_st;
