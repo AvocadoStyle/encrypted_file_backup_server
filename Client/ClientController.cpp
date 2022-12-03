@@ -90,6 +90,7 @@ bool ClientController::registration(){
 	std::string client_id_st = this->res_handler->client_id_st_hex;
 	std::string private_key_st = this->req_handler->private_key;
 	this->file_handler->write_registration_info_file(this->name, client_id_st, private_key_st);
+	s->disconnect();
 	return true;
 }
 
@@ -104,10 +105,19 @@ bool ClientController::authentication() {
 	}
 	
 	/*                 send message with name and public key                      */
-	// initialize will set the values as represented in the file with string:
+	 //initialize will set the values as represented in the file with string:
 	// name, client_id, private_key 
 	this->initialize();
-	s->connect(this->address, this->port);
+	//s->connect(this->address, this->port);
+
+
+	// handle the items from the registration file
+	this->req_handler->authentication_request_handle();
+	// will send header size 23
+	//s->send_msg(this->req_handler->build_message, this->req_handler->header_size);
+	//// will send all the message without the header
+	//s->send_msg(this->req_handler->build_message, this->req_handler->total_size);
+
 
 	
 
