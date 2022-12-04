@@ -67,7 +67,10 @@ class RequestHandler:
         self.message_parser.client_id = client_id_bytes
 
     def __send_public_key_handle_code(self):
-        pass
+        # name + pk
+        content = self.payload_content
+        name, public_key = self.message_parser.parse_name_and_public_key_after()
+        print(f"name is: {name} public_key is: {public_key}" )
 
     def __send_file_handle_code(self):
         pass

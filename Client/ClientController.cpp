@@ -108,15 +108,16 @@ bool ClientController::authentication() {
 	 //initialize will set the values as represented in the file with string:
 	// name, client_id, private_key 
 	this->initialize();
-	//s->connect(this->address, this->port);
+	s->connect(this->address, this->port);
 
-
-	// handle the items from the registration file
+	// handle the data from the registration file
 	this->req_handler->authentication_request_handle();
-	// will send header size 23
-	//s->send_msg(this->req_handler->build_message, this->req_handler->header_size);
-	//// will send all the message without the header
-	//s->send_msg(this->req_handler->build_message, this->req_handler->total_size);
+
+	// send data
+	// will send header size
+	s->send_msg(this->req_handler->build_message, this->req_handler->header_size);
+	// will send all of the message
+	s->send_msg(this->req_handler->build_message, this->req_handler->total_size);
 
 
 	

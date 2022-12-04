@@ -78,9 +78,24 @@ class MessageParser:
         payload_end = payload_start + self.payload_size
         self.payload_content = self.data[payload_start:payload_end]
 
-
-
-
+    def parse_name_and_public_key_after(self):
+        """
+        for the authentication request make explicit parsing name and after the public key
+        :return:
+        """
+        payload_start = self.server_config['MESSAGE_PROPERTIES']['HEADER_SIZE']['TOTAL_SIZE']
+        if type(self.payload_size) == bytes:
+            self.payload_size = int.from_bytes(self.payload_size, byteorder='little')
+        payload_end = payload_start + self.payload_size
+        # first we'll parse the name
+        payload_config_fields = self.server_config['MESSAGE_PROPERTIES']["REQUEST_CODE"]["SEND_PUBLIC_KEY_REQUEST"] \
+            ["FIELD"]
+        payload_name_size = payload_start + payload_config_fields["NAME"]
+        payload_public_key_size = payload_start + payload_config_fields["Public Key"]
+        payload_end_should_be = payload_start + payload_name_size + payload_public_key_size
+        self.name = self.data[payload_start:payload_name_size]
+        self.public_key = self.data[payload_name_size: payload_end]
+        return self.name, self.public_key
 
 
 

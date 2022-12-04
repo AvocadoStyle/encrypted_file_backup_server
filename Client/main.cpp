@@ -10,7 +10,7 @@
 using boost::asio::ip::tcp;
 int main() {
 	ClientController* client_controller = new ClientController();
-	//client_controller->registration();
+	client_controller->registration();
 	client_controller->authentication();
 	
 
