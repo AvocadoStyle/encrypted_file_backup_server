@@ -11,7 +11,23 @@ FileHandler::~FileHandler() {
 
 }
 
-/*                      after register                                         */
+/********************************* read file to send ***************************************/
+/* parse the file that we want to send (the file path is taken from .info file).
+ * we'll read the file path and than read the file content with uint8_t* array.
+ */
+uint8_t* FileHandler::parse_file_to_send() {
+	std::string file_path_name = this->read_file_path_from_file_info();
+	size_t len = file_path_name.length() * sizeof(uint8_t*);
+	uint8_t* file_name = (uint8_t*)malloc(len);
+	memcpy(file_name, file_path_name.c_str(), len);
+	return this->file_utilities->file_read(file_name);
+}
+
+
+
+
+
+/******************************** after register ******************************************/
 
 /*                      after register write info                              */
 bool FileHandler::write_registration_info_file(std::string name, std::string client_id_ascii_hex,
@@ -25,14 +41,6 @@ bool FileHandler::write_registration_info_file(std::string name, std::string cli
 		return false;
 	}
 }
-
-
-
-
-
-
-
-
 
 /*                      after register read info                              */
 bool FileHandler::is_client_register_info_exists() {
@@ -164,6 +172,7 @@ uint8_t* FileHandler::__read_client_instruction_file() {
 	uint8_t* client_instruction_file_name = (uint8_t*)malloc(sizeof(uint8_t) * len);
 	memcpy(client_instruction_file_name, client_instruction.c_str(), len);
 	client_instruction_file_name[len] = '\0';
+	memcpy(this->file_name, client_instruction_file_name, __FILENAME_SIZE__);
 	return file_utilities->file_read(client_instruction_file_name);
 }
 

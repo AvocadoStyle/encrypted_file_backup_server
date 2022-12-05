@@ -22,6 +22,8 @@
 #define __PAYLOAD_SIZE_SIZE__			4
 /*                  PAYLOAD                                */
 #define __NAME_SIZE__					255
+#define __CONTENT_SIZE__				4
+#define __FILE_NAME_SIZE__				255
 #define __PK_SIZE__						160
 
 
@@ -29,16 +31,21 @@
 
 class RequestsHandler {
 public:
-	FileHandler* file_handler;
+	FileHandler*	file_handler;
 	uint8_t			client_id[__CLIENT_ID_SIZE__];
 	uint8_t			version[__VERSION_SIZE__];
 	uint8_t			code[__CODE_SIZE__];
 	uint8_t			payload_size[__PAYLOAD_SIZE_SIZE__];
 	uint8_t			name[__NAME_SIZE__];
+	uint8_t			file_name[__FILE_NAME_SIZE__];
 	uint8_t*		header_message;
 	uint8_t*		payload;
 	uint8_t*		build_message;
 	uint8_t*		build_message_n;
+	uint8_t*		file_to_send_content;
+	uint8_t			file_content_size_bytes[__CONTENT_SIZE__];
+	int				file_content_size;
+	int				payload_int_sized;
 
 	uint8_t			public_key_bytes[__PK_SIZE__];
 	int				total_size;
@@ -53,6 +60,7 @@ public:
 
 	void registration_request_handle(std::string name);
 	void authentication_request_handle();
+	void send_file_request_handle();
 	void generate_rsa_public_key();
 	void generate_rsa_private_key();
 	void initialize_fields_from_register_file_info();
@@ -65,6 +73,7 @@ private:
 	void __set_client_id_from_str_hex_client_id(std::string client_id_str_hex);
 	void __set_private_key_from_str_base64_private_key(std::string private_key_str_base64);
 	void __set_payload_fixed_size(int size_of_payload);
+	size_t __my_strlen(uint8_t* str);
 
 };
 

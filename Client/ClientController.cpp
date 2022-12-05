@@ -119,14 +119,81 @@ bool ClientController::authentication() {
 	// will send all of the message
 	s->send_msg(this->req_handler->build_message, this->req_handler->total_size);
 
-
-	
-
-
-
+	/*                 receive response message of client NAME and AES encrypt key                      */
+//receive response message header
+	uint8_t* receive_buffer_header_response;
+	size_t header_response_size = this->res_handler->HEADER_SIZE_PATTERN;
+	receive_buffer_header_response = (uint8_t*)malloc(sizeof(uint8_t) * header_response_size);
+	s->recv_msg(receive_buffer_header_response,
+		header_response_size);
+	// parse the response header message
+	this->res_handler->init_response_header(receive_buffer_header_response);
+	// receive response message header+payload
+	//uint8_t* receive_buffer_payload_response;
+	size_t payload_response_size = *this->res_handler->int_payload_size; // the size of the response payload
+	// initialize the buffer to be the header + the payload size
+	receive_buffer_header_response = (uint8_t*)malloc(sizeof(uint8_t) * (header_response_size + payload_response_size));
+	// gets the response header+payload from the server
+	s->recv_msg(receive_buffer_header_response,
+		(header_response_size + payload_response_size));
+	// parse the response header+payload message from the buffer that received from the server
+	this->res_handler->response_code_handler(receive_buffer_header_response);
+	s->disconnect();
+	return true;
 }
 
+bool ClientController::send_encrypted_file() {
 
+
+	// if the info file is not exists in this stage we'll throw an error or return false and handle it in another scenario
+	if (!this->file_handler->is_client_register_info_exists()) {
+		return false;
+	}
+
+	/*                 send message with name and public key                      */
+	 //initialize will set the values as represented in the file with string:
+	// name, client_id, private_key 
+	this->initialize();
+	s->connect(this->address, this->port);
+
+	// handle the data from the registration file
+	this->req_handler->send_file_request_handle();
+
+	// send data
+	// will send header size
+	s->send_msg(this->req_handler->build_message, this->req_handler->header_size);
+	// will send all of the message
+	s->send_msg(this->req_handler->build_message, this->req_handler->total_size);
+
+
+
+
+
+
+	/*                 receive response message of client NAME and AES encrypt key                      */
+//receive response message header
+	uint8_t* receive_buffer_header_response;
+	size_t header_response_size = this->res_handler->HEADER_SIZE_PATTERN;
+	receive_buffer_header_response = (uint8_t*)malloc(sizeof(uint8_t) * header_response_size);
+	s->recv_msg(receive_buffer_header_response,
+		header_response_size);
+	// parse the response header message
+	this->res_handler->init_response_header(receive_buffer_header_response);
+	// receive response message header+payload
+	//uint8_t* receive_buffer_payload_response;
+	size_t payload_response_size = *this->res_handler->int_payload_size; // the size of the response payload
+	// initialize the buffer to be the header + the payload size
+	receive_buffer_header_response = (uint8_t*)malloc(sizeof(uint8_t) * (header_response_size + payload_response_size));
+	// gets the response header+payload from the server
+	s->recv_msg(receive_buffer_header_response,
+		(header_response_size + payload_response_size));
+	// parse the response header+payload message from the buffer that received from the server
+	this->res_handler->response_code_handler(receive_buffer_header_response);
+	s->disconnect();
+
+
+	return true;
+}
 
 
 

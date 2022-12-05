@@ -67,10 +67,34 @@ class RequestHandler:
         self.message_parser.client_id = client_id_bytes
 
     def __send_public_key_handle_code(self):
+        """
+        registration request - save to the Clients DB
+            - if the client name does not exists it will send back error code that registration failed
+            - new AES key from public key added to the DB
+        :return:
+        """
         # name + pk
         content = self.payload_content
         name, public_key = self.message_parser.parse_name_and_public_key_after()
+        self.message_parser.name = name
+        self.message_parser.public_key = public_key
+
         print(f"name is: {name} public_key is: {public_key}" )
+        aes_key = self.__generate_aes_key(public_key)
+        self.message_parser.aes_key = aes_key
+        date = "1.1.22"
+        self.clients_db.insert_table(self.message_parser.client_id, name, public_key, date, aes_key)
+
+
+    def __generate_aes_key(self, public_key):
+        """
+        generates AES key from public key that received from the client
+        :param public_key: public key from the client.
+        :return: AES key based on the public key.
+        """
+        return "12345"
+
+
 
     def __send_file_handle_code(self):
         pass

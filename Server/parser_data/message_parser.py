@@ -19,6 +19,7 @@ class MessageParser:
         self.file_name = None
         self.content_size = None
         self.message_content = None
+        self.aes_key = None
         self.s_key_encrypted = None
         self.cksum = None
 

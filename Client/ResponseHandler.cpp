@@ -19,14 +19,25 @@ void ResponseHandler::registration_response_handle(uint8_t* buffer_header_and_pa
 	this->client_id[__CLIENT_ID_SIZE__] = '\0';
 }
 
+void ResponseHandler::authentication_response_handle(uint8_t* buffer_header_and_payload) {
+	int* start;
+	start = (int*)malloc(sizeof(int));
+	// payload starting from
+	*start = this->payload_start;
+	// setting the client_id from the buffer
+	this->__set_message(start, this->client_id, buffer_header_and_payload, __CLIENT_ID_SIZE__);
+	this->client_id[__CLIENT_ID_SIZE__] = '\0';
+	this->__set_message(start, this->aes_key, buffer_header_and_payload, __AES_KEY_SIZE__);
+}
+
 void ResponseHandler::response_code_handler(uint8_t* buffer_header_and_payload) {
 	int CODE = *this->int_code;
 	if (CODE == __REGISTRATION_RES__) {
 		this->registration_response_handle(buffer_header_and_payload);
 	} else if(CODE == __REGISTRATION_FAILED_RES__){
-
+		
 	} else if(CODE == __PRIMARY_KEY_ACCEPTED_RES__){
-
+		this->authentication_response_handle(buffer_header_and_payload);
 	} else if(CODE == __CRC_VALID_RES__){
 
 	} else if(CODE == __ACCEPT_MSG_RES__){
