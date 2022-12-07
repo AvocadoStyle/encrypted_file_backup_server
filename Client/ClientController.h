@@ -29,7 +29,7 @@ public:
 	void initialize();
 	bool registration();
 	bool authentication();
-
+	bool send_encrypted_file();
 };
 
 

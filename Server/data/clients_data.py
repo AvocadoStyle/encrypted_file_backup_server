@@ -22,7 +22,7 @@ class Clients(DataConsumer):
                     Name CHAR(255),
                     PublicKey CHAR(160),
                     LastSeen DATE,
-                    AESkey
+                    AESkey BLOB
                     );
                 """)
         # self.connector.executescript(f"""

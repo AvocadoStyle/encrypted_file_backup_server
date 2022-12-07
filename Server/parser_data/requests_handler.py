@@ -67,10 +67,57 @@ class RequestHandler:
         self.message_parser.client_id = client_id_bytes
 
     def __send_public_key_handle_code(self):
-        pass
+        """
+        registration request - save to the Clients DB
+            - if the client name does not exists it will send back error code that registration failed
+            - new AES key from public key added to the DB
+        :return:
+        """
+        # name + pk
+        content = self.payload_content
+        name, public_key = self.message_parser.parse_name_and_public_key_after()
+        self.message_parser.name = name
+        self.message_parser.public_key = public_key
+
+        print(f"name is: {name} public_key is: {public_key}" )
+        aes_key = self.__generate_aes_key(public_key)
+        self.message_parser.aes_key = aes_key
+        date = "1.1.22"
+        self.clients_db.insert_table(self.message_parser.client_id, name, public_key, date, aes_key)
+
+
+    def __generate_aes_key(self, public_key):
+        """
+        generates AES key from public key that received from the client
+        :param public_key: public key from the client.
+        :return: AES key based on the public key.
+        """
+        return "12345"
+
+
 
     def __send_file_handle_code(self):
-        pass
+        content = self.payload_content
+        self.message_parser.parse_content_size_file_name_message_content()
+
+        # create main directory
+        self.message_parser.create_main_directory()
+
+        # create directory_name from the client_id
+        client_id = self.message_parser.client_id
+        user_directory_name = str(int.from_bytes(client_id, byteorder='little'))
+        self.message_parser.create_user_directory(user_directory_name)
+        # self.message_parser.set_user_file_name(self.message_parser.file_name)
+        self.message_parser.create_client_file()
+
+        # save the data in the file DB
+        self.files_db.insert_table(self.message_parser.client_id, self.message_parser.file_name,
+                                   self.message_parser.user_directory_path, True)
+
+
+
+
+
 
     def __crc_valid_handle_code(self):
         pass
@@ -80,3 +127,4 @@ class RequestHandler:
 
     def __crc_not_valid_exit_handle_code(self):
         pass
+
