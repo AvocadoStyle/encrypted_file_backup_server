@@ -46,6 +46,20 @@ bool FileUtilities::is_file_exists(char* file_name) {
 	return true;
 }
 
+uint8_t* FileUtilities::get_file_name_seperated_from_path(uint8_t* file_path_name) {
+	uint8_t file_path_name_cpy[255];
+	memcpy(file_path_name_cpy, file_path_name, 255);
+	char tk[2] = "\\";
+	char* token;
+	uint8_t last_file_name[255];
+	token = strtok((char*)file_path_name_cpy, tk);
+	while (token != NULL) {
+		memcpy(last_file_name, token, 255);
+		token = strtok(NULL, tk);
+	}
+	return last_file_name;
+}
+
 //char* FileUtilities::string_to_char(std::string st) {
 //	char* c = (char*)malloc(sizeof(char) * st.length());
 //	memcpy(c, st.c_str(), st.length());

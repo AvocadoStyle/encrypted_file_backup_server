@@ -15,7 +15,8 @@ public:
 	FileUtilities *file_utilities;
 	
 	uint8_t file_name[__FILENAME_SIZE__];
-
+	uint8_t file_name_path_from_register_file[__FILENAME_SIZE__];
+	uint8_t file_name_after_parse[__FILENAME_SIZE__];
 	FileHandler();
 	~FileHandler();
 

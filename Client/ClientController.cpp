@@ -144,7 +144,6 @@ bool ClientController::authentication() {
 
 bool ClientController::send_encrypted_file() {
 
-
 	// if the info file is not exists in this stage we'll throw an error or return false and handle it in another scenario
 	if (!this->file_handler->is_client_register_info_exists()) {
 		return false;

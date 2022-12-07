@@ -20,6 +20,10 @@ uint8_t* FileHandler::parse_file_to_send() {
 	size_t len = file_path_name.length() * sizeof(uint8_t*);
 	uint8_t* file_name = (uint8_t*)malloc(len);
 	memcpy(file_name, file_path_name.c_str(), len);
+	memcpy(this->file_name_path_from_register_file, file_path_name.c_str(), len);
+	memcpy(this->file_name_after_parse,
+		this->file_utilities->get_file_name_seperated_from_path(this->file_name_path_from_register_file),
+		__FILENAME_SIZE__);
 	return this->file_utilities->file_read(file_name);
 }
 

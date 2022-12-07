@@ -146,6 +146,18 @@ void RequestsHandler::authentication_request_handle() {
 	}
 }
 
+/* handle the file sending request and build entire message to send to the server
+ * take of the header request and for the payload including:
+ * header:
+ * client_id		: will be placed from the previous registration request.
+ * version			: will set to default value.
+ * code				: will set the code value as expected for the file_send request.
+ * payload size		: will contain the payload size - from the payload: client_id, content_size, file_name, message_content
+ * payload:
+ * client_id		: client id from the registration file
+ * content_size		: the size of the message content, represents in 4 bytes
+ * message_content	: changed size of each file content
+ */
 void RequestsHandler::send_file_request_handle() {
 	// initialize the name, client_id, private_key
 	this->initialize_fields_from_register_file_info();
@@ -166,7 +178,7 @@ void RequestsHandler::send_file_request_handle() {
 	this->file_content_size = len_of_file_content;
 	
 	memcpy(this->file_content_size_bytes, (uint8_t*)&this->file_content_size, __CONTENT_SIZE__);
-	memcpy(this->file_name, this->file_handler->file_name, __FILE_NAME_SIZE__);
+	memcpy(this->file_name, this->file_handler->file_name_after_parse, __FILE_NAME_SIZE__);
 
 
 

@@ -17,6 +17,7 @@ public:
 	bool file_write(uint8_t* file_name);
 	bool create_directory(std::string path);
 	bool is_file_exists(char* file_name);
+	uint8_t* get_file_name_seperated_from_path(uint8_t* file_path_name);
 	//char* string_to_char(std::string st);
 	//uint8_t* string_to_uint8_t(std::string st);
 };

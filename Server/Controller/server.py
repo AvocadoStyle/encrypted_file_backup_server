@@ -75,7 +75,7 @@ class Server:
 
     def __init_message_handler(self, data):
         """
-        dynamic message requests handler and responses
+        creates message handler object and configure the header parameters
         :return: MessageHandle object
         """
         # get the message handler module
@@ -87,13 +87,12 @@ class Server:
 
     def __init_all_message(self, message_handler, data):
         """
+        uses the message handler object and configure the requests and responses to the client through the data.
         dynamic message requests handler and responses
         """
         message_handler.data = data
         message_handler.message_parser.data = data
         message_handler.message_handle_request()
-
-
 
     def init_db(self):
         """
