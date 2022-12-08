@@ -16,7 +16,7 @@ class Files(DataConsumer):
         qe = f"""
                 CREATE TABLE IF NOT EXISTS {self.CLASS_NAME} (
                     ID BLOB PRIMARY KEY, 
-                    FileName CHAR(255),
+                    FileName CHAR(255) PRIMARY KEY,
                     PathName CHAR(255),
                     Verified BOOLEAN
                     );
