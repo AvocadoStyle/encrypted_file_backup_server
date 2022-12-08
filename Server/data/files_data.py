@@ -15,8 +15,8 @@ class Files(DataConsumer):
         self.connect()
         qe = f"""
                 CREATE TABLE IF NOT EXISTS {self.CLASS_NAME} (
-                    ID BLOB PRIMARY KEY,
-                    FileName CHAR(255) PRIMARY KEY,
+                    ID BLOB PRIMARY KEY, 
+                    FileName CHAR(255),
                     PathName CHAR(255),
                     Verified BOOLEAN
                     );
