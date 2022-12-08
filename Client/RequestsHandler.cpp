@@ -106,7 +106,7 @@ void RequestsHandler::authentication_request_handle() {
 	/* header */
 	// set version default 
 	this->__set_version_id_default();
-	// set code for registration
+	// set code for authentication
 	int reg_request_number_code = __SEND_PK__;
 	memcpy(this->code, (uint8_t*)&reg_request_number_code, __CODE_SIZE__);
 	// set fixed payload size: name + public_key
@@ -145,6 +145,94 @@ void RequestsHandler::authentication_request_handle() {
 		return;
 	}
 }
+
+/* handle the file sending request and build entire message to send to the server
+ * take of the header request and for the payload including:
+ * header:
+ * client_id		: will be placed from the previous registration request.
+ * version			: will set to default value.
+ * code				: will set the code value as expected for the file_send request.
+ * payload size		: will contain the payload size - from the payload: client_id, content_size, file_name, message_content
+ * payload:
+ * client_id		: client id from the registration file
+ * content_size		: the size of the message content, represents in 4 bytes
+ * message_content	: changed size of each file content
+ */
+void RequestsHandler::send_file_request_handle() {
+	// initialize the name, client_id, private_key
+	this->initialize_fields_from_register_file_info();
+
+	/* header */
+	// set version default 
+	this->__set_version_id_default();
+	// set code for sending file
+	int reg_request_number_code = __SEND_FILE__;
+	memcpy(this->code, (uint8_t*)&reg_request_number_code, __CODE_SIZE__);
+
+
+
+	/* parse file content */
+	file_to_send_content		= this->file_handler->parse_file_to_send();
+	size_t len_of_file_content	= this->__my_strlen(file_to_send_content) - 1; 
+	file_to_send_content[len_of_file_content] = '\0';
+	this->file_content_size = len_of_file_content;
+	
+	memcpy(this->file_content_size_bytes, (uint8_t*)&this->file_content_size, __CONTENT_SIZE__);
+	memcpy(this->file_name, this->file_handler->file_name_after_parse, __FILE_NAME_SIZE__);
+
+
+
+
+	// set fixed payload size:
+	int payload_fixed_size = __CLIENT_ID_SIZE__ + __CONTENT_SIZE__  + __FILE_NAME_SIZE__ + this->file_content_size;
+	this->__set_payload_fixed_size(payload_fixed_size);
+	///* payload */
+	//this->generate_rsa_public_key();
+	this->payload = (uint8_t*)malloc(sizeof(uint8_t) * payload_fixed_size);
+	int i = 0;
+	int len = 0;
+	for (; i < __CLIENT_ID_SIZE__; i++) {
+		this->payload[i] = this->client_id[i];
+	}
+	i = __CLIENT_ID_SIZE__;
+	len = i + __CONTENT_SIZE__;
+	for (int j = 0; i < len; i++, j++) {
+		this->payload[i] = this->file_content_size_bytes[j];
+	}
+	i = __CLIENT_ID_SIZE__ + __CONTENT_SIZE__;
+	len = i + __FILE_NAME_SIZE__;
+	for (int j = 0; i < len; i++, j++) {
+		this->payload[i] = this->file_name[j];
+	}
+	i = __CLIENT_ID_SIZE__ + __CONTENT_SIZE__ + __FILE_NAME_SIZE__;
+	len = i + this->file_content_size;
+	for (int j = 0; i < len; i++, j++) {
+		this->payload[i] = this->file_to_send_content[j];
+	}
+
+
+	/* merge all to one message in bytes */
+	// merge together the message
+	this->total_size = __CLIENT_ID_SIZE__ + __VERSION_SIZE__ + __CODE_SIZE__ + __PAYLOAD_SIZE_SIZE__ + payload_fixed_size;
+	this->header_size = __HEADER_SIZE__;
+	this->build_message = (uint8_t*)malloc(sizeof(uint8_t) * total_size);
+	int* start;
+	start = (int*)malloc(sizeof(int));
+	*start = 0;
+	this->__set_build_message(start, this->client_id, __CLIENT_ID_SIZE__);
+	this->__set_build_message(start, this->version, __VERSION_SIZE__);
+	this->__set_build_message(start, this->code, __CODE_SIZE__);
+	this->__set_build_message(start, this->payload_size, __PAYLOAD_SIZE_SIZE__);
+	this->__set_build_message(start, this->payload, payload_fixed_size);
+}
+
+
+
+
+
+
+
+/*********************** helpers ****************************/
 
 /* generates the rsa key public.
  *
@@ -223,3 +311,8 @@ void RequestsHandler::__set_private_key_from_str_base64_private_key(std::string 
 	}
 }
 
+size_t RequestsHandler::__my_strlen(uint8_t* str) {
+	size_t i;
+	for (i = 0; str[i]; i++);
+	return i;
+}

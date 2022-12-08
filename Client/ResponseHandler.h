@@ -13,14 +13,15 @@
 
 /*                  HEADERS                                */
 #define __HEADER_RES_SIZE__					7 
-#define __CLIENT_ID_SIZE__				16
-#define __VERSION_SIZE__				1
-#define __CODE_SIZE__					2
-#define __PAYLOAD_SIZE_SIZE__			4
+#define __CLIENT_ID_SIZE__					16
+#define __VERSION_SIZE__					1
+#define __CODE_SIZE__						2
+#define __PAYLOAD_SIZE_SIZE__				4
 /*                  PAYLOAD                                */
-#define __NAME_SIZE__					255
-#define __PK_SIZE__						160
-#define __CLIENT_ID_SIZE__				16
+#define __NAME_SIZE__						255
+#define __PK_SIZE__							160
+#define __CLIENT_ID_SIZE__					16
+#define __AES_KEY_SIZE__					16
 
 
 
@@ -33,6 +34,7 @@ public:
 	uint8_t*			payload;
 	uint8_t				name[__NAME_SIZE__];
 	uint8_t				public_key[__PK_SIZE__];
+	uint8_t				aes_key[__AES_KEY_SIZE__];
 	uint8_t				client_id[__CLIENT_ID_SIZE__];
 	std::string			client_id_st_hex;
 	unsigned int*		int_code;
@@ -52,6 +54,7 @@ public:
 	// payload response handler:
 	void response_code_handler(uint8_t* buffer_header_and_payload);
 	void registration_response_handle(uint8_t* buffer_header_and_payload);
+	void authentication_response_handle(uint8_t* buffer_header_and_payload);
 	void set_client_id_str_hex();
 
 

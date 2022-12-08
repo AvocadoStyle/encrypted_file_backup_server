@@ -8,12 +8,20 @@
 #define CLIENT_INFO				"me.info"
 #define CLIENT_ID_HEX_SIZE		32
 
+#define __FILENAME_SIZE__		255
+
 class FileHandler {
 public:
 	FileUtilities *file_utilities;
 	
+	uint8_t file_name[__FILENAME_SIZE__];
+	uint8_t file_name_path_from_register_file[__FILENAME_SIZE__];
+	uint8_t file_name_after_parse[__FILENAME_SIZE__];
 	FileHandler();
 	~FileHandler();
+
+	/*						file to send handle									  */
+	uint8_t* parse_file_to_send();
 
 	/*                      before register read info                             */
 	std::string read_address_from_file_info();
