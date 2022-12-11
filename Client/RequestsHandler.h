@@ -4,6 +4,7 @@
 #include <iostream>
 #include <boost/algorithm/hex.hpp>
 #include "FileHandler.h"
+#include "Crc.h"
 //#include <stdlib.h>
 //#include "stdlib.h"
 
@@ -32,6 +33,7 @@
 class RequestsHandler {
 public:
 	FileHandler*	file_handler;
+	CRC*			crc_handler;
 	uint8_t			client_id[__CLIENT_ID_SIZE__];
 	uint8_t			version[__VERSION_SIZE__];
 	uint8_t			code[__CODE_SIZE__];
@@ -44,6 +46,7 @@ public:
 	uint8_t*		build_message_n;
 	uint8_t*		file_to_send_content;
 	uint8_t			file_content_size_bytes[__CONTENT_SIZE__];
+	uint32_t		cksum = 0;
 	int				file_content_size;
 	int				payload_int_sized;
 
@@ -61,6 +64,9 @@ public:
 	void registration_request_handle(std::string name);
 	void authentication_request_handle();
 	void send_file_request_handle();
+	void crc_valid();
+	void crc_not_valid();
+	void crc_not_valid_final();
 	void generate_rsa_public_key();
 	void generate_rsa_private_key();
 	void initialize_fields_from_register_file_info();
@@ -73,6 +79,7 @@ private:
 	void __set_client_id_from_str_hex_client_id(std::string client_id_str_hex);
 	void __set_private_key_from_str_base64_private_key(std::string private_key_str_base64);
 	void __set_payload_fixed_size(int size_of_payload);
+	void __send_requests_crc(int request);
 	size_t __my_strlen(uint8_t* str);
 
 };

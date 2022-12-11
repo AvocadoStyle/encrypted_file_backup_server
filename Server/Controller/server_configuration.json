@@ -104,13 +104,19 @@
             "FILE_RECEIVED_CRC_SUCCESS_RESPONSE": {
                 "CODE": 2103,
                 "FIELD": {
-                    "CLIENT_ID": 16
+                    "CLIENT_ID"     :       16,
+                    "CONTENT_SIZE"  :       4,
+                    "FILE_NAME"     :       255,
+                    "CKSUM"         :       4
                 }
             },
-            "ACCESS_MESSAGE_RESPONSE": {
+            "MESSAGE_GOOD": {
                 "CODE": 2104,
                 "FIELD": {
-                    "CLIENT_ID": 16
+                    "CLIENT_ID"     :       16,
+                    "CONTENT_SIZE"  :       4,
+                    "FILE_NAME"     :       255,
+                    "CKSUM"         :       4
                 }
             }
         }

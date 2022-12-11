@@ -1,7 +1,8 @@
 #include "RequestsHandler.h"
 
 RequestsHandler::RequestsHandler() {
-	this->file_handler = new FileHandler();
+	this->file_handler	= new FileHandler();
+	this->crc_handler	= new CRC();
 }
 
 RequestsHandler::~RequestsHandler() {
@@ -224,9 +225,22 @@ void RequestsHandler::send_file_request_handle() {
 	this->__set_build_message(start, this->code, __CODE_SIZE__);
 	this->__set_build_message(start, this->payload_size, __PAYLOAD_SIZE_SIZE__);
 	this->__set_build_message(start, this->payload, payload_fixed_size);
+
+	this->crc_handler->update(this->file_to_send_content, file_content_size);
+	this->cksum = this->crc_handler->digest();
 }
 
+void RequestsHandler::crc_valid() {
+	this->__send_requests_crc(__CRC_VALID__);
+}
 
+void RequestsHandler::crc_not_valid() {
+	this->__send_requests_crc(__CRC_NOT_VALID_SEND_AGAIN__);
+}
+
+void RequestsHandler::crc_not_valid_final() {
+	this->__send_requests_crc(__CRC_NOT_VALID_LAST_X__);
+}
 
 
 
@@ -315,4 +329,46 @@ size_t RequestsHandler::__my_strlen(uint8_t* str) {
 	size_t i;
 	for (i = 0; str[i]; i++);
 	return i;
+}
+
+void RequestsHandler::__send_requests_crc(int REQUEST) {
+	// initialize the name, client_id, private_key
+	this->initialize_fields_from_register_file_info();
+
+	/* header */
+	// set version default 
+	this->__set_version_id_default();
+	// set code for sending file
+	int reg_request_number_code = REQUEST;
+	memcpy(this->code, (uint8_t*)&reg_request_number_code, __CODE_SIZE__);
+	memcpy(this->file_name, this->file_handler->file_name_after_parse, __FILE_NAME_SIZE__);
+
+	int payload_fixed_size = __CLIENT_ID_SIZE__ + __FILE_NAME_SIZE__;
+	this->__set_payload_fixed_size(payload_fixed_size);
+	///* payload */
+	//this->generate_rsa_public_key();
+	this->payload = (uint8_t*)malloc(sizeof(uint8_t) * payload_fixed_size);
+	int i = 0;
+	int len = 0;
+	for (; i < __CLIENT_ID_SIZE__; i++) {
+		this->payload[i] = this->client_id[i];
+	}
+	i = __CLIENT_ID_SIZE__;
+	len = i + __FILE_NAME_SIZE__;
+	for (int j = 0; i < len; i++, j++) {
+		this->payload[i] = this->file_name[j];
+	}
+	/* merge all to one message in bytes */
+	// merge together the message
+	this->total_size = __CLIENT_ID_SIZE__ + __VERSION_SIZE__ + __CODE_SIZE__ + __PAYLOAD_SIZE_SIZE__ + payload_fixed_size;
+	this->header_size = __HEADER_SIZE__;
+	this->build_message = (uint8_t*)malloc(sizeof(uint8_t) * total_size);
+	int* start;
+	start = (int*)malloc(sizeof(int));
+	*start = 0;
+	this->__set_build_message(start, this->client_id, __CLIENT_ID_SIZE__);
+	this->__set_build_message(start, this->version, __VERSION_SIZE__);
+	this->__set_build_message(start, this->code, __CODE_SIZE__);
+	this->__set_build_message(start, this->payload_size, __PAYLOAD_SIZE_SIZE__);
+	this->__set_build_message(start, this->payload, payload_fixed_size);
 }
