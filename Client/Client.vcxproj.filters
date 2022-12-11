@@ -36,6 +36,9 @@
     <ClCompile Include="FileHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Crc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -61,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="FileHandler.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Crc.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

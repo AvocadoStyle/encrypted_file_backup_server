@@ -30,6 +30,11 @@ public:
 	bool registration();
 	bool authentication();
 	bool send_encrypted_file();
+	bool crc_valid();
+	bool crc_not_valid();
+	bool crc_not_valid_at_all();
+
+
 };
 
 

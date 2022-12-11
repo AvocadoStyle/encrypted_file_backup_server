@@ -143,7 +143,6 @@ class MessageParser:
 
 
     def create_client_file(self):
-        self
         with open(os.path.join(self.user_directory_path, self.file_name_explicit_string), "wb") as binary_file:
             # Write bytes to file
             binary_file.write(self.message_content)

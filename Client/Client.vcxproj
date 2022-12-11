@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ClientController.cpp" />
+    <ClCompile Include="Crc.cpp" />
     <ClCompile Include="FileHandler.cpp" />
     <ClCompile Include="FileUtilities.cpp" />
     <ClCompile Include="main.cpp" />
@@ -141,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientController.h" />
+    <ClInclude Include="Crc.h" />
     <ClInclude Include="FileHandler.h" />
     <ClInclude Include="FileUtilities.h" />
     <ClInclude Include="RequestsHandler.h" />
