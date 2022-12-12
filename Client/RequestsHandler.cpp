@@ -226,6 +226,9 @@ void RequestsHandler::send_file_request_handle() {
 	this->__set_build_message(start, this->payload_size, __PAYLOAD_SIZE_SIZE__);
 	this->__set_build_message(start, this->payload, payload_fixed_size);
 
+	this->cksum = 0;
+	delete crc_handler;
+	this->crc_handler = new CRC();
 	this->crc_handler->update(this->file_to_send_content, file_content_size);
 	this->cksum = this->crc_handler->digest();
 }

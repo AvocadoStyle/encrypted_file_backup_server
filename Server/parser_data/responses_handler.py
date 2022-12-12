@@ -148,13 +148,13 @@ class ResponseHandler:
         )
         self.message_parser.response_data = struct.pack(
             f'2s',
-            b'ty')
+            b'ok')
 
     def __crc_not_valid_handle_code(self):
         response_fields = self.response_code["MESSAGE_GOOD"]
         self.code_response = response_fields["CODE"]
         self.message_parser.code_response = self.code_response
-        self.message_parser.payload_size_response = 0
+        self.message_parser.payload_size_response = 2
         code_bytes = (int.to_bytes(self.message_parser.code_response, byteorder='big', length=2))
         payload_size_bytes  = (int.to_bytes(self.message_parser.payload_size_response, byteorder='little',
                                            length=4))
@@ -164,11 +164,14 @@ class ResponseHandler:
             code_bytes,
             payload_size_bytes
         )
+        self.message_parser.response_data = struct.pack(
+            f'2s',
+            b'no')
     def __crc_not_valid_exit_handle_code(self):
         response_fields = self.response_code["MESSAGE_GOOD"]
         self.code_response = response_fields["CODE"]
         self.message_parser.code_response = self.code_response
-        self.message_parser.payload_size_response = 0
+        self.message_parser.payload_size_response = 2
         code_bytes = (int.to_bytes(self.message_parser.code_response, byteorder='big', length=2))
         payload_size_bytes  = (int.to_bytes(self.message_parser.payload_size_response, byteorder='little',
                                            length=4))
@@ -178,3 +181,6 @@ class ResponseHandler:
             code_bytes,
             payload_size_bytes
         )
+        self.message_parser.response_data = struct.pack(
+            f'2s',
+            b'xx')
