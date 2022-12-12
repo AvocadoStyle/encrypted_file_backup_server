@@ -231,7 +231,7 @@ bool ClientController::crc_valid() {
 	receive_buffer_header_response = (uint8_t*)malloc(sizeof(uint8_t) * (header_response_size + payload_response_size));
 	// gets the response header+payload from the server
 	s->recv_msg(receive_buffer_header_response,
-		(header_response_size + payload_response_size));
+		(payload_response_size));
 	// parse the response header+payload message from the buffer that received from the server
 	this->res_handler->response_code_handler(receive_buffer_header_response);
 	s->disconnect();
@@ -275,7 +275,7 @@ bool ClientController::crc_not_valid() {
 	receive_buffer_header_response = (uint8_t*)malloc(sizeof(uint8_t) * (header_response_size + payload_response_size));
 	// gets the response header+payload from the server
 	s->recv_msg(receive_buffer_header_response,
-		(header_response_size + payload_response_size));
+		(payload_response_size));
 	// parse the response header+payload message from the buffer that received from the server
 	this->res_handler->response_code_handler(receive_buffer_header_response);
 	s->disconnect();
@@ -319,7 +319,7 @@ bool ClientController::crc_not_valid_at_all() {
 	receive_buffer_header_response = (uint8_t*)malloc(sizeof(uint8_t) * (header_response_size + payload_response_size));
 	// gets the response header+payload from the server
 	s->recv_msg(receive_buffer_header_response,
-		(header_response_size + payload_response_size));
+		(payload_response_size));
 	// parse the response header+payload message from the buffer that received from the server
 	this->res_handler->response_code_handler(receive_buffer_header_response);
 	s->disconnect();

@@ -60,17 +60,6 @@ class Server:
         conn.sendall(response_data_header)
         conn.sendall(response_data)
 
-        # a = 1
-        # bt2 = int.to_bytes(a, byteorder='big', length=1001)
-        # bt3 = struct.pack('23s1001s', message_handler.message_parser.response_data, bt2)
-        # conn.sendall(message_handler.message_parser.response_data)
-        # conn.sendall(bt3)
-
-
-
-
-
-
         conn.close()
 
     def __init_message_handler(self, data):
