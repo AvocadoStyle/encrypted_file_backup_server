@@ -8,7 +8,6 @@
 #include "FileHandler.h"
 #include "FileUtilities.h"
 
-
 class ClientController {
 public:
 	std::string port;
