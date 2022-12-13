@@ -5,6 +5,18 @@
 #include <boost/algorithm/hex.hpp>
 #include "FileHandler.h"
 #include "Crc.h"
+
+
+#include "Base64Wrapper.h"
+#include "RSAWrapper.h"
+#include "AESWrapper.h"
+
+#include <iomanip>
+
+
+
+
+
 //#include <stdlib.h>
 //#include "stdlib.h"
 
@@ -34,6 +46,7 @@ class RequestsHandler {
 public:
 	FileHandler*	file_handler;
 	CRC*			crc_handler;
+	RSAPrivateWrapper rsapriv;
 	uint8_t			client_id[__CLIENT_ID_SIZE__];
 	uint8_t			version[__VERSION_SIZE__];
 	uint8_t			code[__CODE_SIZE__];
@@ -55,6 +68,7 @@ public:
 	int				header_size;
 	std::string		public_key = "";
 	std::string		private_key;
+	std::string		private_key_base64;
 	std::string		client_id_st_hex;
 	std::string		name_st;
 

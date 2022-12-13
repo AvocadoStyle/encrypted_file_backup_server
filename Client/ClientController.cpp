@@ -88,7 +88,7 @@ bool ClientController::registration(){
 	// will set the client_id bytes to string hex to insert it in the future to the registration info file
 	this->res_handler->set_client_id_str_hex();
 	std::string client_id_st = this->res_handler->client_id_st_hex;
-	std::string private_key_st = this->req_handler->private_key;
+	std::string private_key_st = this->req_handler->private_key_base64;
 	this->file_handler->write_registration_info_file(this->name, client_id_st, private_key_st);
 	s->disconnect();
 	return true;

@@ -94,8 +94,9 @@ std::string FileHandler::read_private_key_64_from_register_file_info() {
 	size_t private_key_start = cntnt.find(del) + 1 + CLIENT_ID_HEX_SIZE + 1;
 
 	std::string private_key_s = cntnt.substr(private_key_start);
-	size_t private_key_end = private_key_s.find(del);
-	return cntnt.substr(private_key_start, private_key_end);
+	//size_t private_key_end = private_key_s.find(del);
+	//return cntnt.substr(private_key_start, private_key_end);
+	return private_key_s;
 }
 
 

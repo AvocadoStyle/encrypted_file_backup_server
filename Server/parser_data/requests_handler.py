@@ -1,4 +1,5 @@
 import uuid
+import datetime
 
 
 class RequestHandler:
@@ -82,7 +83,7 @@ class RequestHandler:
         print(f"name is: {name} public_key is: {public_key}" )
         aes_key = self.__generate_aes_key(public_key)
         self.message_parser.aes_key = aes_key
-        date = "1.1.22"
+        date = datetime.datetime.now().__str__()
         self.clients_db.insert_table(self.message_parser.client_id, name, public_key, date, aes_key)
 
 

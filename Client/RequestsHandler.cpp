@@ -21,7 +21,9 @@ void RequestsHandler::initialize_fields_from_register_file_info() {
 		if (this->file_handler->is_client_register_info_exists()) {
 			this->name_st = this->file_handler->read_name_from_register_file_info();
 			this->client_id_st_hex = this->file_handler->read_client_id_from_register_file_info();
-			this->private_key = this->file_handler->read_private_key_64_from_register_file_info();
+			this->private_key_base64 = this->file_handler->read_private_key_64_from_register_file_info();
+			this->private_key = Base64Wrapper::decode(this->private_key_base64);
+			this->generate_rsa_public_key();
 		}
 
 		/* convert the string values and hex values into bytes and initialize the bytes of the request object according
@@ -140,7 +142,6 @@ void RequestsHandler::authentication_request_handle() {
 	this->__set_build_message(start, this->code, __CODE_SIZE__);
 	this->__set_build_message(start, this->payload_size, __PAYLOAD_SIZE_SIZE__);
 	this->__set_build_message(start, this->payload, __NAME_SIZE__+__PK_SIZE__);
-
 	}
 	catch (...) {
 		return;
@@ -255,16 +256,18 @@ void RequestsHandler::crc_not_valid_final() {
  *
  */
 void RequestsHandler::generate_rsa_public_key() {
-	std::string pkk = "abcdefg";
-	for (int i = 0; i < pkk.length(); i++) {
-		this->public_key_bytes[i] = pkk.c_str()[i];
+	RSAPrivateWrapper rsapriv_other(Base64Wrapper::decode(this->private_key_base64));
+	this->public_key = rsapriv_other.getPublicKey();
+	for (int i = 0; i < __PK_SIZE__; i++) {
+		this->public_key_bytes[i] = (uint8_t)(this->public_key.c_str()[i]);
 	}
 }
 /* generates the rsa key private.
  *
  */
 void RequestsHandler::generate_rsa_private_key() {
-	this->private_key = "1234";
+	this->private_key			= rsapriv.getPrivateKey();
+	this->private_key_base64	= Base64Wrapper::encode(this->private_key);
 }
 
 /*
