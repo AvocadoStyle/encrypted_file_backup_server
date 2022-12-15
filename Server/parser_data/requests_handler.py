@@ -116,10 +116,13 @@ class RequestHandler:
         will decrypt the encrypted content with the aes key
         """
         message_content_cipher = self.message_parser.message_content
-        self.message_parser.message_content_decrypted =  (self.message_parser.crypt_handle.decrypt_data_with_aes_key(message_content_cipher,
+        self.message_parser.message_content_decrypted =  \
+            (self.message_parser.crypt_handle.decrypt_data_with_aes_key(message_content_cipher,
                                                                           self.message_parser.aes_key,
-                                                                          self.message_parser.content_size_int)).\
-            strip()
+                                                                          self.message_parser.content_size_int))
+
+        self.message_parser.message_content_decrypted = \
+            self.message_parser.message_content_decrypted[:-ord(self.message_parser.message_content_decrypted[-1:])]
         return self.message_parser.message_content_decrypted
 
     def __send_file_handle_code(self):
