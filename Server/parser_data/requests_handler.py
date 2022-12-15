@@ -81,21 +81,46 @@ class RequestHandler:
         self.message_parser.public_key = public_key
 
         print(f"name is: {name} public_key is: {public_key}" )
-        aes_key = self.__generate_aes_key(public_key)
+        aes_key = self.__generate_handle_aes_key(public_key)
+
         self.message_parser.aes_key = aes_key
-        date = datetime.datetime.now().__str__()
-        self.clients_db.insert_table(self.message_parser.client_id, name, public_key, date, aes_key)
+        self.message_parser.date = datetime.datetime.now().__str__()
+        self.clients_db.update_table_aes(self.message_parser.client_id,
+                                     name,
+                                     public_key,
+                                     self.message_parser.date,
+                                     aes_key)
+        self.message_parser.aes_key_encrypted = self.__encrypt_aes_with_public_key(aes_key, public_key)
 
 
-    def __generate_aes_key(self, public_key):
+    def __generate_handle_aes_key(self, public_key):
         """
         generates AES key from public key that received from the client
         :param public_key: public key from the client.
         :return: AES key based on the public key.
         """
-        return "12345"
+        # generates and get the aes key
+        aes_key = self.message_parser.crypt_handle.create_AES()
+        return aes_key
 
+    def __encrypt_aes_with_public_key(self, aes_key, public_key):
+        """
+        encrypt the AES data key with the public key
+        :param aes_key: aes key
+        :param public_key: public key rsa from the client
+        """
+        return self.message_parser.crypt_handle.encrypt_AESkey_with_rsa_key_to_send_to_the_client(aes_key, public_key)
 
+    def __decrypt_content_with_aes_key(self):
+        """
+        will decrypt the encrypted content with the aes key
+        """
+        message_content_cipher = self.message_parser.message_content
+        self.message_parser.message_content_decrypted =  (self.message_parser.crypt_handle.decrypt_data_with_aes_key(message_content_cipher,
+                                                                          self.message_parser.aes_key,
+                                                                          self.message_parser.content_size_int)).\
+            strip()
+        return self.message_parser.message_content_decrypted
 
     def __send_file_handle_code(self):
         content = self.payload_content
@@ -109,6 +134,10 @@ class RequestHandler:
         user_directory_name = str(int.from_bytes(client_id, byteorder='little'))
         self.message_parser.create_user_directory(user_directory_name)
         # self.message_parser.set_user_file_name(self.message_parser.file_name)
+        all = self.clients_db.get_client_by_id(
+            self.message_parser.client_id)
+        self.message_parser.aes_key = all[0][4]
+        self.__decrypt_content_with_aes_key()
         self.message_parser.create_client_file()
 
         # save the data in the file DB
@@ -128,4 +157,3 @@ class RequestHandler:
 
     def __crc_not_valid_exit_handle_code(self):
         pass
-

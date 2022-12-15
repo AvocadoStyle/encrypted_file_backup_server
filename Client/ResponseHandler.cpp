@@ -17,7 +17,7 @@ void ResponseHandler::registration_response_handle(uint8_t* buffer_header_and_pa
 	*start = this->payload_start;
 	// setting the client_id from the buffer
 	this->__set_message(start, this->client_id, buffer_header_and_payload, __CLIENT_ID_SIZE__);
-	this->client_id[__CLIENT_ID_SIZE__] = '\0';
+	//this->client_id[__CLIENT_ID_SIZE__] = '\0';
 }
 
 void ResponseHandler::authentication_response_handle(uint8_t* buffer_header_and_payload) {
@@ -28,7 +28,21 @@ void ResponseHandler::authentication_response_handle(uint8_t* buffer_header_and_
 	// setting the client_id from the buffer
 	this->__set_message(start, this->client_id, buffer_header_and_payload, __CLIENT_ID_SIZE__);
 	this->client_id[__CLIENT_ID_SIZE__] = '\0';
-	this->__set_message(start, this->aes_key, buffer_header_and_payload, __AES_KEY_SIZE__);
+	//this->__set_message(start, this->aes_key, buffer_header_and_payload, __AES_KEY_SIZE__);
+	/* getting the aes key encrypted with the public key */
+	this->__set_message(start, this->aes_key_encrypted, buffer_header_and_payload, __AES_KEY_ENCRYPTED_SIZE__);
+	/* now decrypt the aes encrypted key with the rsa private key */
+	this->aes_key_encrypted_st = (char*)&this->aes_key_encrypted;
+
+	//RSAPrivateWrapper decryptorr = RSAPrivateWrapper(this->private_key);
+	//RSAPrivateWrapper decryptorr = RSAPrivateWrapper(this->private_key);
+	RSAPrivateWrapper rsapriv_other(Base64Wrapper::decode(this->priv_key_base64));
+	//char* dsds = (char*)malloc(sizeof(char) * 128);
+
+	//dsds = reinterpret_cast<char*>(this->aes_key_encrypted);
+	//this->aes_key_st = decryptorr.decrypt(dsds);
+	this->aes_key_st = rsapriv_other.decrypt((char*)&this->aes_key_encrypted, 128);		// 6. you can decrypt an std::string or a const char* buffer
+
 }
 
 bool ResponseHandler::receive_crc_response_handle(uint8_t* buffer_header_and_payload) {
@@ -97,7 +111,12 @@ void ResponseHandler::set_client_id_str_hex() {
 	for (int i = 0; i < __CLIENT_ID_SIZE__; i++) {
 		ss << std::setw(2) << std::setfill('0') << (int)this->client_id[i];
 	}
-	this->client_id_st_hex = ss.str();
+	std::string swhat = ss.str();
+	this->client_id_st_hex = swhat;
+}
+
+void ResponseHandler::set_private_key(std::string private_key) {
+	this->private_key = private_key;
 }
 
 void ResponseHandler::__from_uint8_array_to_int(uint32_t* to, uint8_t* from, size_t size) {

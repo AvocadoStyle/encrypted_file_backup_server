@@ -1,10 +1,13 @@
 import struct
 import os
+from parser_data import cryptography
+
 
 class MessageParser:
     def __init__(self, data, server_config):
         self.data = data
         self.server_config = server_config
+        self.crypt_handle = cryptography.crypt_handle()
         self.client_id = None
         self.version = None
         self.code = None
@@ -22,10 +25,12 @@ class MessageParser:
         self.content_size_bytes = None
         self.content_size_int = None
         self.message_content = None
+        self.message_content_decrypted = None
         self.aes_key = None
+        self.aes_key_encrypted = None
         self.s_key_encrypted = None
         self.cksum = None
-
+        self.date = None
 
         # finally
         self.response_data = None
@@ -145,7 +150,7 @@ class MessageParser:
     def create_client_file(self):
         with open(os.path.join(self.user_directory_path, self.file_name_explicit_string), "wb") as binary_file:
             # Write bytes to file
-            binary_file.write(self.message_content)
+            binary_file.write(self.message_content_decrypted)
         print("ok")
 
     def create_main_directory(self):

@@ -174,19 +174,39 @@ void RequestsHandler::send_file_request_handle() {
 
 
 	/* parse file content */
+	// get the content of the file
 	file_to_send_content		= this->file_handler->parse_file_to_send();
+	// get the length of the content
 	size_t len_of_file_content	= this->__my_strlen(file_to_send_content) - 1; 
 	file_to_send_content[len_of_file_content] = '\0';
 	this->file_content_size = len_of_file_content;
 	
+	// encrypt the content
+	//memcpy(this->aes_key_bytes, (uint8_t*)(this->aes_key.c_str()), __AES_KEY_SIZE__);
+	this->aes_key_bytes_char = (unsigned char*)malloc(sizeof(unsigned char) * __AES_KEY_SIZE__);
+	memcpy(this->aes_key_bytes_char, this->aes_key.c_str(), __AES_KEY_SIZE__);
+	AESWrapper aes(this->aes_key_bytes_char, __AES_KEY_SIZE__);
+	this->encrypted_file_content = aes.encrypt((char*)file_to_send_content, len_of_file_content);
+
+	this->encrypted_file_content_size = this->encrypted_file_content.length();
+	
+	
 	memcpy(this->file_content_size_bytes, (uint8_t*)&this->file_content_size, __CONTENT_SIZE__);
 	memcpy(this->file_name, this->file_handler->file_name_after_parse, __FILE_NAME_SIZE__);
 
+	this->encrypted_file_to_send_content_bytes = (uint8_t*)malloc(sizeof(uint8_t) *
+		encrypted_file_content_size);
+	this->__convert_string_to_uint8_t(this->encrypted_file_to_send_content_bytes,
+		this->encrypted_file_content, this->encrypted_file_content_size);
 
-
+	memcpy(this->encrypted_file_content_size_bytes,
+		(uint8_t*)&this->encrypted_file_content_size,
+		__CONTENT_SIZE__);
+	
 
 	// set fixed payload size:
-	int payload_fixed_size = __CLIENT_ID_SIZE__ + __CONTENT_SIZE__  + __FILE_NAME_SIZE__ + this->file_content_size;
+	int payload_fixed_size = __CLIENT_ID_SIZE__ + __CONTENT_SIZE__  + __FILE_NAME_SIZE__
+		+ this->encrypted_file_content_size;
 	this->__set_payload_fixed_size(payload_fixed_size);
 	///* payload */
 	//this->generate_rsa_public_key();
@@ -199,7 +219,7 @@ void RequestsHandler::send_file_request_handle() {
 	i = __CLIENT_ID_SIZE__;
 	len = i + __CONTENT_SIZE__;
 	for (int j = 0; i < len; i++, j++) {
-		this->payload[i] = this->file_content_size_bytes[j];
+		this->payload[i] = this->encrypted_file_content_size_bytes[j];
 	}
 	i = __CLIENT_ID_SIZE__ + __CONTENT_SIZE__;
 	len = i + __FILE_NAME_SIZE__;
@@ -207,9 +227,9 @@ void RequestsHandler::send_file_request_handle() {
 		this->payload[i] = this->file_name[j];
 	}
 	i = __CLIENT_ID_SIZE__ + __CONTENT_SIZE__ + __FILE_NAME_SIZE__;
-	len = i + this->file_content_size;
+	len = i + this->encrypted_file_content_size;
 	for (int j = 0; i < len; i++, j++) {
-		this->payload[i] = this->file_to_send_content[j];
+		this->payload[i] = this->encrypted_file_to_send_content_bytes[j];
 	}
 
 
@@ -227,6 +247,8 @@ void RequestsHandler::send_file_request_handle() {
 	this->__set_build_message(start, this->payload_size, __PAYLOAD_SIZE_SIZE__);
 	this->__set_build_message(start, this->payload, payload_fixed_size);
 
+
+	/* cksum with the original data */
 	this->cksum = 0;
 	delete crc_handler;
 	this->crc_handler = new CRC();
@@ -377,4 +399,14 @@ void RequestsHandler::__send_requests_crc(int REQUEST) {
 	this->__set_build_message(start, this->code, __CODE_SIZE__);
 	this->__set_build_message(start, this->payload_size, __PAYLOAD_SIZE_SIZE__);
 	this->__set_build_message(start, this->payload, payload_fixed_size);
+}
+
+void RequestsHandler::set_aes_key(std::string aes_key) {
+	this->aes_key = aes_key;
+}
+
+void RequestsHandler::__convert_string_to_uint8_t(uint8_t* to, std::string from, int size) {
+	for (int i = 0; i < size; i++) {
+		to[i] = (uint8_t)from.c_str()[i];
+	}
 }

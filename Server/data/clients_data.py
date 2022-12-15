@@ -54,6 +54,24 @@ class Clients(DataConsumer):
             self.client_logic.AESkey))
         self.execute_query(insert_command_query)
 
+    def update_table_aes(self, ID=None, Name=None, PublicKey=None, LastSeen=None, AESkey=None):
+        """
+        update the client table values for one client.
+        check inside if the parameters are valid for the protocol.
+        :param ID:
+        :param Name:
+        :param PublicKey:
+        :param LastSeen:
+        :param AESkey:
+        :return:
+        """
+        self.client_logic = ClientLogic(ID, Name, PublicKey, LastSeen, AESkey)
+        self.client_logic.check_protocol_valid()  # @TODO
+        insert_command_query = (f"""UPDATE {self.CLASS_NAME} SET AESkey=? WHERE ID=?""", (
+            self.client_logic.AESkey,
+            self.client_logic.ID))
+        self.execute_query(insert_command_query)
+
     def get_client_by_id(self, ID):
         """
         :param ID:

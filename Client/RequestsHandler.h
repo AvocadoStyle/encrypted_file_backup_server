@@ -33,6 +33,10 @@
 #define __VERSION_SIZE__				1
 #define __CODE_SIZE__					2
 #define __PAYLOAD_SIZE_SIZE__			4
+
+#define __AES_KEY_SIZE__				16
+#define __AES_KEY_ENCRYPTED_SIZE__		128
+
 /*                  PAYLOAD                                */
 #define __NAME_SIZE__					255
 #define __CONTENT_SIZE__				4
@@ -58,15 +62,23 @@ public:
 	uint8_t*		build_message;
 	uint8_t*		build_message_n;
 	uint8_t*		file_to_send_content;
+	uint8_t*		encrypted_file_to_send_content_bytes;
+	std::string		encrypted_file_content;
 	uint8_t			file_content_size_bytes[__CONTENT_SIZE__];
+	uint8_t			encrypted_file_content_size_bytes[__CONTENT_SIZE__];
 	uint32_t		cksum = 0;
 	int				file_content_size;
+	int				encrypted_file_content_size;
 	int				payload_int_sized;
 
 	uint8_t			public_key_bytes[__PK_SIZE__];
 	int				total_size;
 	int				header_size;
 	std::string		public_key = "";
+	std::string		aes_key;
+	uint8_t			aes_key_bytes[__AES_KEY_SIZE__];
+	unsigned char*			aes_key_bytes_char;
+	std::string		aes_key_encrypted[__AES_KEY_ENCRYPTED_SIZE__];
 	std::string		private_key;
 	std::string		private_key_base64;
 	std::string		client_id_st_hex;
@@ -84,6 +96,7 @@ public:
 	void generate_rsa_public_key();
 	void generate_rsa_private_key();
 	void initialize_fields_from_register_file_info();
+	void set_aes_key(std::string aes_key);
 
 private:
 	void __set_build_message(int* start, uint8_t* section, int size_to_add);
@@ -95,7 +108,7 @@ private:
 	void __set_payload_fixed_size(int size_of_payload);
 	void __send_requests_crc(int request);
 	size_t __my_strlen(uint8_t* str);
-
+	void __convert_string_to_uint8_t(uint8_t* to, std::string from, int size);
 };
 
 

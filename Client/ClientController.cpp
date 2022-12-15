@@ -89,6 +89,7 @@ bool ClientController::registration(){
 	this->res_handler->set_client_id_str_hex();
 	std::string client_id_st = this->res_handler->client_id_st_hex;
 	std::string private_key_st = this->req_handler->private_key_base64;
+	this->res_handler->priv_key_base64 = private_key_st;
 	this->file_handler->write_registration_info_file(this->name, client_id_st, private_key_st);
 	s->disconnect();
 	return true;
@@ -137,7 +138,10 @@ bool ClientController::authentication() {
 	s->recv_msg(receive_buffer_header_response,
 		(header_response_size + payload_response_size));
 	// parse the response header+payload message from the buffer that received from the server
+	this->res_handler->priv_key_base64 = this->req_handler->private_key_base64;
+	this->res_handler->set_private_key(this->req_handler->private_key);
 	this->res_handler->response_code_handler(receive_buffer_header_response);
+	this->req_handler->set_aes_key(this->res_handler->aes_key_st);
 	s->disconnect();
 	return true;
 }

@@ -98,7 +98,8 @@
                 "CODE": 2102,
                 "FIELD": {
                     "CLIENT_ID": 16,
-                    "AES_KEY": 16
+                    "AES_KEY": 16,
+                    "AES_KEY_ENCRYPTED": 128
                 }
             },
             "FILE_RECEIVED_CRC_SUCCESS_RESPONSE": {
